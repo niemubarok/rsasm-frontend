@@ -21,24 +21,13 @@
           <div>
             <q-chip>Silahkan Lengkapi Data Pasien</q-chip>
           </div>
-          <q-form
-            @submit="
-              [
-                onSubmit,
-                (store.components.state.isConfirm = true),
-                (store.components.state.dialogConfirm = true),
-              ]
-            "
-          >
+          <q-form @submit="onSubmit">
             <div>
               <q-input
                 ref="inputNik"
                 v-model="store.patient.oldPatientForm.nik"
                 mask="################"
-                :rules="[
-                  (val) => !!val || 'Mohon masukan NIK',
-                  (val) => val.length >= 16 || 'Angka yang anda masukan kurang',
-                ]"
+                :rules="formRules.nik"
                 clearable
                 class="q-mt-sm"
                 flat
@@ -50,14 +39,20 @@
                 class="q-mt-sm"
                 flat
                 label="Nama Lengkap Pasien Sesuai KTP"
+                :rules="formRules.nama"
               />
               <q-input
                 v-model="store.patient.oldPatientForm.birthDate"
-                :rules="(val) => val !== '' || 'Tanggal Lahir Wajib Diisi!'"
+                :rules="formRules.tglLahir"
                 clearable
-                :hint="!$q.platform.is.mobile? 'Tanggal Lahir (contoh: 20/09/1992)':''"
-                :label="$q.platform.is.mobile ? 'Tanggal Lahir': ''"
+                :hint="
+                  !$q.platform.is.mobile
+                    ? 'Tanggal Lahir (contoh: 20/09/1992)'
+                    : ''
+                "
+                :label="$q.platform.is.mobile ? 'Tanggal Lahir' : ''"
                 type="date"
+                mask="##/##/####"
               >
                 <!-- <template #label>
                   <div class="row items-end all-pointer-events q-ml-xl q-pl-xl">
@@ -79,7 +74,9 @@
                 mask="####-####-####"
                 class="q-mt-sm"
                 flat
-                label="No. HP"
+                label="No. Whatsapp"
+                :rules="formRules.HP"
+                hint="Kami akan mengirimkan detail pendaftaran via whatsapp"
               />
             </div>
             <div class="row flex items-end">
@@ -92,13 +89,8 @@
                   text-color="accent"
                   class="q-mt-md"
                   label="Konfirmasi"
+                  @click="onSubmit"
                 />
-                <!-- @click="
-                    [
-                      (store.components.state.isConfirm = true),
-                      (store.components.state.dialogConfirm = true),
-                    ]
-                  " -->
               </div>
             </div>
           </q-form>
@@ -117,8 +109,25 @@ import DialogConfirm from "./DialogConfirm.vue";
 export default {
   components: { DialogConfirm },
   setup() {
+    const store = inject("store");
+    const formRules = {
+      nik: [
+        (val) => !!val || "Mohon masukan NIK",
+        (val) => val.length >= 16 || "Angka yang anda masukan kurang",
+      ],
+      nama: [(val) => !!val || "Masukkan Nama Lengkap"],
+      tglLahir: [(val) => val !== "" || "Tanggal Lahir Wajib Diisi!"],
+      HP: [(val) => val.length > 6 || "Masukan nomor Whatsapp yang valid"],
+    };
+
+    const onSubmit = () => {
+      store.components.state.isConfirm = true;
+      store.components.state.dialogConfirm = true;
+    };
     return {
-      store: inject("store"),
+      store,
+      onSubmit,
+      formRules,
     };
   },
 };

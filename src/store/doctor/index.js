@@ -13,7 +13,7 @@ const data = {
       id: "001",
       name: "dr. Abdurrahman, Sp.P",
       specialist: "paru",
-      date: "17-06-2021",
+      date: "03-08-2021",
       time: {
         start: "07.50",
         end: "08.50",

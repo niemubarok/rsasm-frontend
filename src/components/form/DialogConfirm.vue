@@ -58,9 +58,7 @@
           flat
           label="Cancel"
           color="primary"
-          @click="
-            [(store.components.state.isConfirm = false), (accept = false)]
-          "
+          @click="onclosePopUp"
         />
 
         <q-btn
@@ -69,7 +67,7 @@
           label="Daftarkan"
           rounded
           color="secondary text-accent"
-          @click="[onSubmit, $router.push('/registration/registered')]"
+          @click="onSubmit"
         >
         </q-btn>
       </q-card-actions>
@@ -98,29 +96,38 @@ export default {
     });
     const accept = ref(false);
 
+    const onclosePopUp = () => {
+      store.components.state.isConfirm = false;
+      accept = false;
+    };
+
+    const onSubmit = () => {
+      if (accept.value !== true) {
+        $q.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: "You need to accept the license and terms first",
+        });
+      } else {
+        $q.notify({
+          color: "green-4",
+          textColor: "white",
+          icon: "cloud_done",
+          message: "Submitted",
+        });
+
+        $router.push("/registration/registered");
+      }
+    };
+
     return {
       confirmPatientData,
       store,
       accept,
       TglLahir,
-
-      onSubmit() {
-        if (accept.value !== true) {
-          $q.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
-            message: "You need to accept the license and terms first",
-          });
-        } else {
-          $q.notify({
-            color: "green-4",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "Submitted",
-          });
-        }
-      },
+      onclosePopUp,
+      onSubmit,
     };
   },
 };

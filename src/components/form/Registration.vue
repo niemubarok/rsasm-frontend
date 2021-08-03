@@ -15,11 +15,8 @@
     <div>
       <navigation card-title="Form Pendaftaran Online" />
 
-      <q-badge
-        :floating="$q.screen.gt.md"
-        class="transparent q-ml-md"
-        align="right"
-      >
+      <!-- align="right" -->
+      <q-badge :floating="$q.screen.gt.md" class="transparent q-ml-md">
         <stepper
           :style="$q.platform.is.mobile ? 'font-size:10px' : ''"
           :done="$route.params.id"
@@ -31,12 +28,13 @@
 
     <div class="row q-mt-sm">
       <!-- STEP 1 -->
-      <!-- <step-1 /> -->
+      <step-1 />
 
       <!-- Step 2 -->
-      <div v-if="!$route.params.id" v-show="showNext" class="col-md q-ml-sm">
-        <!-- <skeleton-detail-pasien /> -->
-      </div>
+      <!-- <div v-if="!$route.params.id" v-show="showNext" class="col-md q-ml-sm"> -->
+      <!-- <skeleton-detail-pasien /> -->
+      <step-2 />
+      <!-- </div> -->
       <transition
         appear
         enter-active-class="animated fadeInDown"
@@ -59,7 +57,8 @@ import Stepper from "./Stepper.vue";
 import OldPatientForm from "./OldPatientForm.vue";
 import DialogConfirm from "./DialogConfirm.vue";
 import Navigation from "../button/Navigation.vue";
-// import Step1 from "./Step1.vue";
+import Step1 from "./Step1.vue";
+import Step2 from "./Step2.vue";
 // import FormPasienSkeleton from "./FormPasienSkeleton.vue";
 // import SkeletonDetailPasien from "./SkeletonDetailPasien.vue";
 
@@ -70,7 +69,8 @@ export default {
     // OldPatientForm,
     DialogConfirm,
     Navigation,
-    // Step1,
+    Step1,
+    Step2,
     // FormPasienSkeleton,
   },
   // SkeletonDetailPasien,

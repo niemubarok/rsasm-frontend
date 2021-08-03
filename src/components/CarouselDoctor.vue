@@ -46,7 +46,6 @@ export default {
   components: { CardDoctor },
   props: {
     scrollAreaStyle: {
-      type: String,
       default: "",
     },
     rowClass: {

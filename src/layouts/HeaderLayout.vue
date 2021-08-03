@@ -13,7 +13,7 @@
           height="50px"
           style="max-width: 50px"
         />
-        <router-link to="/" style="text-decoration:none">
+        <!-- <router-link to="/" style="text-decoration:none"> -->
           <q-toolbar-title
             v-if="$q.screen.gt.sm"
             shrink
@@ -24,12 +24,12 @@
               <span style="color: #f9a602"> Ali Sibroh Malisi</span></strong
             >
           </q-toolbar-title>
-        </router-link>
+        <!-- </router-link> -->
 
         <!-- <q-space /> -->
 
         <!-- search -->
-        <q-input
+        <!-- <q-input
           v-if="$q.screen.gt.sm && !store.components.state.searchBoxClicked"
           v-model="store.doctor.searchText.value"
           class="q-mr-md GPL__toolbar-input"
@@ -46,7 +46,7 @@
               @click="store.doctor.searchText.value = ''"
             />
           </template>
-        </q-input>
+        </q-input> -->
 
         <reg-button />
 

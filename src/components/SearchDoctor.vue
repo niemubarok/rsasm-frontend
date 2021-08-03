@@ -2,20 +2,8 @@
 <template>
   <q-card flat class="transparent card-search">
     <div :style="$q.screen.gt.sm ? '' : 'margin-bottom:50px;'">
-      <navigation card-title="Cari Jadwal Dokter" style="z-index: 2" />
+      <navigation card-title="Cari Jadwal Dokter" />
       <q-space v-if="$q.screen.lt.sm" />
-      <!-- :removable="store.doctor.searchText.value" -->
-      <!-- v-model:selected="store.doctor.searchText.value" -->
-      <!-- <q-chip
-      clickable
-      class="shadow-4"
-      :class="store.doctor.searchText.value == '' ? 'bg-secondary text-white' : 'bg-grey-7 text-grey-2'"
-      @click="[(store.doctor.searchText.value = ''),(store.doctor.searchDate.value = ''), (store.components.state.todaySelected = false), (chooseDateSelected = false)]"
-      >Semua</q-chip
-    > -->
-      <!-- @remove="[(store.components.state.todaySelected = false)]" -->
-      <!-- store.doctor.searchDate.value == today() -->
-      <!-- :removable="store.components.state.todaySelected" -->
       <q-chip
         v-model:selected="store.components.state.todaySelected"
         style="z-index: 1"
@@ -26,13 +14,9 @@
             : 'bg-grey-7 text-grey-2'
         "
         dark
-        @remove="[(store.doctor.searchDate.value = '')]"
         @click="todayBtn()"
         >Hari Ini</q-chip
       >
-      <!-- (store.components.state.todaySelected = false), -->
-
-      <!-- color="grey-5" -->
       <q-btn
         style="z-index: 2"
         icon="event"
@@ -41,7 +25,7 @@
           chooseDateSelected ? store.doctor.searchDate.value : 'Pilih Tanggal'
         "
         :class="
-          chooseDateSelected & !store.components.state.todaySelected
+          chooseDateSelected && !store.components.state.todaySelected
             ? 'bg-secondary text-white'
             : 'bg-grey-7 text-grey-2'
         "
@@ -82,9 +66,7 @@
           dense
           class="q-pl-sm z-max"
         >
-          <!-- borderless -->
           <template #selected-item="scope">
-            <!-- v-if="store.doctor.searchSpecialist.value !== ''" -->
             <q-chip
               removable
               dense
@@ -95,30 +77,11 @@
               style="z-index: 2"
               @remove="scope.removeAtIndex(scope.index)"
             >
-              <!-- <q-avatar
-            color="secondary"
-            text-color="white"
-            :icon="scope.opt.icon"
-          /> -->
               {{ store.doctor.searchSpecialist.value }}
             </q-chip>
           </template>
         </q-select>
       </q-btn>
-      <!-- </q-badge> -->
-
-      <!-- <q-chip
-      v-model:selected="store.components.state.todaySelected"
-      :removable="store.components.state.todaySelected"
-      icon="filter_list"
-      class="shadow-4"
-      :class="
-        store.components.state.todaySelected ? 'bg-secondary text-white' : 'bg-grey-7 text-grey-2'
-      "
-      @remove="[(store.components.state.todaySelected = false), (store.doctor.searchDate.value = '')]"
-      @click="today()"
-      >Filter Klinik</q-chip
-    > -->
     </div>
 
     <div>
@@ -179,6 +142,7 @@ export default {
       // store.components.state.todaySelected = true;
       const today = date.formatDate(Date.now(), "DD-MM-YYYY");
       store.doctor.searchDate.value = today;
+      // console.log(today);
       // return today
     };
     const timeStamp = date.formatDate(Date.now(), "YYYY/MM/DD");

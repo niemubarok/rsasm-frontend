@@ -20,6 +20,8 @@ const state = reactive({
   },
 });
 
+
+
 setTimeout(() => {
   state.showSwipeIcon = false;
 }, 2500);

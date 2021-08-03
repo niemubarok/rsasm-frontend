@@ -69,17 +69,29 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, ref } from "vue";
+import CardDoctor from "../CardDoctor.vue";
 
 export default {
+  components: {
+    CardDoctor,
+  },
   setup() {
     const store = inject("store");
+    const showCard = ref(false);
+    setTimeout(() => {
+      showCard.value = true;
+    }, 100);
+    const showNext = ref(false);
+    setTimeout(() => {
+      showNext.value = true;
+    }, 500);
     return {
       store,
+      showCard,
     };
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>

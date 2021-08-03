@@ -1,23 +1,27 @@
 <template>
-    <!-- :ripple="false" -->
-    <!-- style="z-index: 2" -->
-  <q-btn
-    flat
-    rounded
-    icon="west"
-    @click="
-      [
+  <!-- :ripple="false" -->
+  <router-link to="/" style="text-decoration: none">
+    <q-btn
+      style="z-index: 2"
+      flat
+      rounded
+      icon="home"
+      color="grey-9"
+      @click="
+        [
           (store.doctor.searchText.value = ''),
-        (store.doctor.isFiltered.value = false),
-        (store.components.state.searchBoxClicked = false),
-        $router.back(),
-        log
-      ]"
-  />
-        <!-- 
+          (store.doctor.isFiltered.value = false),
+          (store.components.state.searchBoxClicked = false),
+        ]
+      "
+    />
+  </router-link>
+  <!-- $router.push('/'), -->
+  <!-- log -->
+  <!-- 
       ]
     " -->
-    <!-- :ripple="false" -->
+  <!-- :ripple="false" -->
   <!-- <q-btn
     style="z-index: 2"
     flat
@@ -51,14 +55,14 @@ export default {
   },
 
   setup() {
-    const store = inject("store")
-    const log = ()=>{
+    const store = inject("store");
+    const log = () => {
       console.log("clicked");
-    }
+    };
 
     return {
       store,
-      log
+      log,
     };
   },
 };

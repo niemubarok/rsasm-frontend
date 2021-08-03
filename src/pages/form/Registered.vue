@@ -10,7 +10,7 @@
         <q-img
           class="full-width "
           :ratio="4/4"
-          src="/img/Ok.gif"
+          src="~assets/img/Ok.gif"
         />
       </template>
 
@@ -39,7 +39,7 @@
               <q-img
                 v-if="!$q.platform.is.mobile"
                 class="col-4"
-                src="/img/Ok.gif"
+                src="~assets/img/Ok.gif"
               />
 
               <q-card-section class="row justify-center text-center">
@@ -74,7 +74,7 @@
               <h6 class="text-center">
                 Arahkan qrcode berikut pada alat yang disediakan saat check in
               </h6>
-              <img src="/img/qr-code-ex.png" style="width: 200px" />
+              <img src="~assets/img/qr-code-ex.png" style="width: 200px" />
             </div>
             <!-- style="border-radius: 30px;" -->
           </q-card>
