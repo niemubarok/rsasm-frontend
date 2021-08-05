@@ -16,11 +16,9 @@ const state = reactive({
   isConfirm: false,
   todaySelected: false,
   today: function () {
-    return date.formatDate(Date.now(), "DD-MM-YYYY");
+    return Date.now();
   },
 });
-
-
 
 setTimeout(() => {
   state.showSwipeIcon = false;

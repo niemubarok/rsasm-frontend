@@ -27,7 +27,7 @@ vue/require-prop-types */
             class="bg-accent text-light q-px-sm q-py-sm"
             align="middle"
             rounded
-            :label="'Klinik ' + specialist"
+            :label="specialist"
             text-color="primary"
             size="sm"
           />
@@ -37,9 +37,12 @@ vue/require-prop-types */
     <q-card-section style="margin-top: -25px">
       <div
         class="text-h6 text-center"
-        style="text-overflow: ellipsis; overflow: hidden"
+        style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
       >
-        <span class="text-accent text-light">
+        <span
+          class="text-accent text-light"
+          style="text-overflow: ellipsis; overflow: hidden"
+        >
           {{ doctor }}
         </span>
       </div>
@@ -59,12 +62,7 @@ vue/require-prop-types */
         text-color="primary"
         color="secondary"
         label="Daftar"
-        @click="
-          [
-            (store.doctor.searchText.value = ''),
-            (store.components.searchBoxClicked = false),
-          ]
-        "
+        @click="daftar"
       />
       <!-- Daftar
         </q-btn> -->
@@ -73,14 +71,21 @@ vue/require-prop-types */
 </template>
 
 <script>
-import {inject} from 'vue'
+import { inject } from "vue";
 export default {
   // eslint-disable-next-line vue/require-prop-types
   props: ["id", "pictureUrl", "specialist", "doctor", "time"],
-  setup(){
+  setup() {
+    const store = inject("store");
+    const daftar = () => {
+      return [
+        (store.doctor.state.searchText.value = ""),
+        (store.components.searchBoxClicked = false),
+      ];
+    };
     return {
-      store : inject('store')
-    }
-  }
+      daftar,
+    };
+  },
 };
 </script>

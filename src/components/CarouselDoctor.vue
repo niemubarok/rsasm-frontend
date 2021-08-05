@@ -6,15 +6,16 @@
     :style="scrollAreaStyle"
   >
     <div class="row justify-center" :class="rowClass">
+      <!-- {{ store.doctor.state.detail.value }} -->
       <div
-        v-for="(item, index) of store.doctor.filterBy.any()"
+        v-for="(item, index) of store.doctor.state.filterDokter()"
         :key="index"
         :class="$q.screen.gt.md ? 'items-center q-ma-sm' : ''"
       >
+        <!-- :picture-url="item.url" -->
         <card-doctor
           :id="item.id"
-          :picture-url="item.url"
-          :doctor="item.name"
+          :doctor="item.nama"
           :specialist="item.specialist"
           :time="item.time"
         />
@@ -63,7 +64,7 @@ export default {
     };
 
     onMounted(() => {
-      store.doctor.searchDate.value = store.components.state.today();
+      store.doctor.state.searchDate.value = store.components.state.today();
     });
 
     return {

@@ -9,7 +9,7 @@
         style="z-index: 1"
         class="shadow-4"
         :class="
-          store.doctor.searchDate.value == store.components.state.today()
+          store.doctor.state.searchDate.value == store.components.state.today()
             ? 'bg-secondary text-white'
             : 'bg-grey-7 text-grey-2'
         "
@@ -21,9 +21,7 @@
         style="z-index: 2"
         icon="event"
         rounded
-        :label="
-          chooseDateSelected ? store.doctor.searchDate.value : 'Pilih Tanggal'
-        "
+        :label="chooseDateSelected ? kalenderLabel() : 'Pilih Tanggal'"
         :class="
           chooseDateSelected && !store.components.state.todaySelected
             ? 'bg-secondary text-white'
@@ -61,8 +59,8 @@
         no-caps
       >
         <q-select
-          v-model="store.doctor.searchSpecialist.value"
-          :options="store.doctor.clinicLists"
+          v-model="store.doctor.state.searchSpecialist.value"
+          :options="store.doctor.state.clinicLists.value"
           dense
           class="q-pl-sm z-max"
         >
@@ -70,14 +68,14 @@
             <q-chip
               removable
               dense
-              :tabindex="store.doctor.searchSpecialist.value"
+              :tabindex="store.doctor.state.searchSpecialist.value"
               color="white"
               text-color="secondary"
               class="q-ma-none"
               style="z-index: 2"
               @remove="scope.removeAtIndex(scope.index)"
             >
-              {{ store.doctor.searchSpecialist.value }}
+              <!-- {{ store.doctor.state.searchSpecialist.value }} -->
             </q-chip>
           </template>
         </q-select>
@@ -96,7 +94,7 @@
     </div>
 
     <q-card
-      v-if="store.doctor.filterBy.any() == ''"
+      v-if="store.doctor.state.detail.length == 0"
       flat
       tag="div"
       class="
@@ -113,6 +111,9 @@
       Dokter yang anda cari tidak tersedia,<br />
       silahkan pilih tanggal lainnya
     </q-card>
+
+    <!-- {{ store.doctor.state.detail.value }} -->
+
     <carousel-doctor
       :scroll-area-style="style"
       style="height: 80vh; z-index: 1"
@@ -122,7 +123,7 @@
 
 <script>
 import CarouselDoctor from "./CarouselDoctor.vue";
-import { ref, inject } from "vue";
+import { ref, inject, onMounted } from "vue";
 import { date } from "quasar";
 import Navigation from "./button/Navigation.vue";
 
@@ -141,13 +142,19 @@ export default {
     const todayBtn = () => {
       // store.components.state.todaySelected = true;
       const today = date.formatDate(Date.now(), "DD-MM-YYYY");
-      store.doctor.searchDate.value = today;
+      store.doctor.state.searchDate.value = today;
       // console.log(today);
       // return today
     };
     const timeStamp = date.formatDate(Date.now(), "YYYY/MM/DD");
     const datePicker = ref(timeStamp);
     const proxyDate = ref(timeStamp);
+    const kalenderLabel = () => {
+      return date.formatDate(
+        store.doctor.state.searchDate.value,
+        "dddd, DD-MM-YYYY"
+      );
+    };
 
     const updateProxy = () => {
       proxyDate.value = datePicker.value;
@@ -163,11 +170,14 @@ export default {
     const save = () => {
       chooseDateSelected.value = true;
       store.components.state.todaySelected = false;
-      store.doctor.searchDate.value = date.formatDate(
-        proxyDate.value,
-        "DD-MM-YYYY"
-      );
+      store.doctor.state.searchDate.value = proxyDate.value;
+      store.doctor.state.getDataDokter();
     };
+
+    onMounted(() => {
+      store.doctor.state.searchDate.value = Date.now();
+      store.doctor.state.getDataDokter();
+    });
 
     return {
       todayBtn,
@@ -179,6 +189,7 @@ export default {
       save,
       optionFn,
       updateProxy,
+      kalenderLabel,
     };
   },
 };

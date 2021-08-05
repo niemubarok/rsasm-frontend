@@ -1,7 +1,7 @@
 <template>
   <!-- :ripple="false" -->
   <router-link to="/" style="text-decoration: none">
-    <q-btn
+    <!-- <q-btn
       style="z-index: 2"
       flat
       rounded
@@ -14,7 +14,7 @@
           (store.components.state.searchBoxClicked = false),
         ]
       "
-    />
+    /> -->
   </router-link>
   <!-- $router.push('/'), -->
   <!-- log -->

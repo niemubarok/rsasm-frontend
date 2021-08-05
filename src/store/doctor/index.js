@@ -2,206 +2,41 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { date } from "quasar";
-import axios from 'axios'
+import axios from "axios";
+import data from "../patient";
 
 const today = () => {
   return date.formatDate(Date.now, "DD-MM-YYYY");
 };
 
-const data = {
-  detail: [
-    {
-      id: "001",
-      name: "dr. Abdurrahman, Sp.P",
-      specialist: "paru",
-      date: "03-08-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "/img/abdurrahman.jpg",
-    },
-    {
-      id: "002",
-      name: "dr. Wulunggono, Sp.PD",
-      specialist: "Internis",
-      date: "17-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "003",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "17-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "004",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "17-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "005",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "17-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "006",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "17-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "8",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "06-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "9",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "05-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "10",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "05-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "11",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "10-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "12",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "14-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "13",
-      name: "dr. Vincent",
-      specialist: "Kulit",
-      date: "15-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "14",
-      name: "dr. Vincent",
-      specialist: "Gigi",
-      date: "14-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-    {
-      id: "15",
-      name: "dr. Indra",
-      specialist: "Kandungan",
-      date: "14-06-2021",
-      time: {
-        start: "07.50",
-        end: "08.50",
-      },
-      url: "https://cdn.quasar.dev/img/avatar4.jpg",
-    },
-  ],
-  clinicSelectModel: ref([]),
-  clinicList: [
-    {
-      label: "Gigi",
-      value: 1,
-      icon: "medical_services",
-    },
-    {
-      label: "Internis",
-      value: 2,
-    },
-    {
-      label: "Kandungan",
-      value: 3,
-    },
-    {
-      label: "Mata",
-      value: 4,
-    },
-    {
-      label: "Orthopedi",
-      value: 5,
-    },
-  ],
-  clinicLists: ["Gigi", "Internis", "Kandungan", "Mata"],
+const state = {
+  // detail: [
+  //   {
+  //     id: "001",
+  //     name: "dr. Abdurrahman, Sp.P",
+  //     specialist: "paru",
+  //     date: "03-08-2021",
+  //     time: {
+  //       start: "07.50",
+  //       end: "08.50",
+  //     },
+  //     url: "/img/abdurrahman.jpg",
+  //   },
+  // ],
+  detail: ref([]),
+  clinicLists: ref(["Gigi", "Internis", "Kandungan", "Mata"]),
   searchText: ref(""),
   searchSpecialist: ref(null),
   searchDate: ref(""),
   isFiltered: ref(false),
   filterBy: {
     any: function () {
-      return data.detail.filter((filtered) => {
-        const typedText = data.searchText.value.toLowerCase();
-        const selectedDate = data.searchDate.value;
+      return state.detail.filter((filtered) => {
+        const typedText = state.searchText.value.toLowerCase();
+        const selectedDate = state.searchDate.value;
         const selectedSpecialist =
-          data.searchSpecialist.value !== null
-            ? data.searchSpecialist.value.toLowerCase()
+          state.searchSpecialist.value !== null
+            ? state.searchSpecialist.value.toLowerCase()
             : "";
 
         // const filteredByDate = filtered.date.includes(selectedDate);
@@ -233,8 +68,8 @@ const data = {
       });
     },
     time: function () {
-      return data.detail.filter((filtered) => {
-        return filtered.date.includes(data.searchText.value);
+      return state.detail.filter((filtered) => {
+        return filtered.date.includes(state.searchText.value);
       });
     },
     // selectedDate: ref(""),
@@ -242,6 +77,17 @@ const data = {
       const today = date.formatDate(Date.now(), "DD-MM-YYYY");
       return this.filterByTime(today);
     },
+  },
+
+  filterDokter: () => {
+    return state.detail.value.filter((dokter) => {
+      const selectedSpecialist =
+        state.searchSpecialist.value !== null
+          ? state.searchSpecialist.value
+          : "";
+      // console.log(dokter.specialist.includes("POLI OBGYN"));
+      return dokter.specialist.includes(selectedSpecialist);
+    });
   },
 
   doctorId() {
@@ -265,25 +111,45 @@ const data = {
     console.log(today);
     return this.filterByTime(today);
   },
+
+  getDataDokter: () => {
+    const changeFormatSearchDate = date.formatDate(
+      state.searchDate.value,
+      "DD-MMMM-YYYY"
+    );
+    const dayNumber = new Date(state.searchDate.value).getDay();
+
+    state.detail.value = [];
+    state.clinicLists.value = [];
+    axios
+      .post("http://127.0.0.1:3333/api/dokter", {
+        data: {
+          hari: dayNumber,
+        },
+      })
+      .then((res) => {
+        return Object.values(res.data.data).forEach((dokter) => {
+          // console.log(Object.keys(dokter).length);
+          const detail = {
+            id: dokter.kd_dokter,
+            nama: dokter.nm_dokter,
+            specialist: dokter.nm_poli,
+            date: state.searchDate.value,
+            time: {
+              start: dokter.jam_mulai,
+              end: dokter.jam_selesai,
+            },
+          };
+          // console.log(detail);
+          // const listPoli = dokter.filter(
+          //   (x, i, a) => a.indexOf(x) == i
+          // );
+          state.clinicLists.value.push(dokter.nm_poli);
+          state.detail.value.push(detail);
+          // console.log(state.clinicLists.value);
+        });
+      });
+  },
 };
 
-const getDataDokter = ()=>{
-  axios.post('http://127.0.0.1:3333/api/dokter',{
-    data:{
-      hari: "kamis"
-    }
-  }).then(data=>{
-    // id: "14",
-    // nama: "dr. Vincent",
-    // specialist: "Gigi",
-    // date: "14-06-2021",
-    // time: {
-    //   start: "07.50",
-    //   end: "08.50",
-    // },
-  })
-}
-
-
-
-export default {data, getDataDokter};
+export default { state };

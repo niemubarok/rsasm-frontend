@@ -39,12 +39,12 @@
               </q-chip>
             </router-link>
           </div>
+          <!-- :picture-url="store.doctor.state.selected().url" -->
           <card-doctor
             v-if="$route.params.id"
-            :picture-url="store.doctor.selected().url"
-            :doctor="store.doctor.selected().name"
-            :specialist="store.doctor.selected().specialist"
-            :time="store.doctor.selected().time"
+            :doctor="store.doctor.state.selected().name"
+            :specialist="store.doctor.state.selected().specialist"
+            :time="store.doctor.state.selected().time"
           />
           <q-card-section
             v-if="!$route.params.id"
@@ -55,7 +55,8 @@
                 class="text-primary bg-white"
                 style="border-radius: 30px"
                 @click="
-                  store.doctor.searchDate.value = store.components.state.today()
+                  store.doctor.state.searchDate.value =
+                    store.components.state.today()
                 "
               >
                 Pilih Dokter
