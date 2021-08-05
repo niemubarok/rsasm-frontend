@@ -24,10 +24,10 @@ const routes = [
       },
     ],
   },
-  // {
-  //   path: "/test",
-  //   component: () => import("pages/test.vue"),
-  // },
+  {
+    path: "/test",
+    component: () => import("pages/test.vue"),
+  },
   // {
   //   path:'/registration',
   //   component: ()=> import('pages/form/RegistrationPage.vue'),

@@ -59,6 +59,7 @@ import CarouselDoctor from "src/components/CarouselDoctor.vue";
 import { useQuasar } from "quasar";
 import Article from "src/components/Article.vue";
 // import InfoHeader from "components/InfoHeader.vue"
+// import {getDataDokter} from '/store'
 
 export default {
   components: {
@@ -86,6 +87,8 @@ export default {
     const store = inject("store");
 
     const show = ref(true);
+
+
 
     return {
       scrollArea,

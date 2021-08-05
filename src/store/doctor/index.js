@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { date } from "quasar";
+import axios from 'axios'
 
 const today = () => {
   return date.formatDate(Date.now, "DD-MM-YYYY");
@@ -266,4 +267,23 @@ const data = {
   },
 };
 
-export default data;
+const getDataDokter = ()=>{
+  axios.post('http://127.0.0.1:3333/api/dokter',{
+    data:{
+      hari: "kamis"
+    }
+  }).then(data=>{
+    // id: "14",
+    // nama: "dr. Vincent",
+    // specialist: "Gigi",
+    // date: "14-06-2021",
+    // time: {
+    //   start: "07.50",
+    //   end: "08.50",
+    // },
+  })
+}
+
+
+
+export default {data, getDataDokter};
