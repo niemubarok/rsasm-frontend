@@ -12,31 +12,23 @@ vue/require-prop-types */
       width: 80vw;
       background-image: linear-gradient(#f4c360, #e8a216);
     "
-    :style="$q.screen.gt.xs ? 'width:250px;' : ''"
+    :style="$q.screen.gt.xs ? 'width:300px;' : ''"
   >
     <q-card-section horizontal>
       <q-card-section style="margin-left: 10%; margin-top: -10%">
-        <div class="row no-wrap">
-          <q-avatar size="80px" class="shadow-4">
-            <img :src="pictureUrl" />
-          </q-avatar>
-          <q-space />
-          <q-chip
-            :style="$q.screen.lt.sm ? 'margin-right:-60%' : ''"
-            style="margin-top: 15%; margin-left: 25%"
-            class="bg-accent text-light q-px-sm q-py-sm"
-            align="middle"
-            rounded
-            :label="specialist"
-            text-color="primary"
-            size="sm"
-          />
-        </div>
+        <!-- <div class="row "> -->
+        <q-avatar size="80px" class="shadow-4">
+          <img :src="pictureUrl" />
+        </q-avatar>
+        <!-- <q-space /> -->
+        <!-- align="middle" -->
+
+        <!-- </div> -->
       </q-card-section>
     </q-card-section>
     <q-card-section style="margin-top: -25px">
       <div
-        class="text-h6 text-center"
+        class="text-subtitle1 text-center"
         style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap"
       >
         <span
@@ -45,6 +37,19 @@ vue/require-prop-types */
         >
           {{ doctor }}
         </span>
+      </div>
+      <div class="column items-center">
+        <!-- <div class="col items-center"> -->
+          <q-chip
+            style="text-align: center"
+            :style="$q.screen.lt.sm ? 'margin-right:-10%' : ''"
+            class="bg-accent text-center text-light q-px-sm q-py-sm q-mt-sm"
+            rounded
+            :label="specialist"
+            text-color="primary"
+            size="sm"
+          />
+        <!-- </div> -->
       </div>
     </q-card-section>
     <q-separator style="margin-top: -15px" />

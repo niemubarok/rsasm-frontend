@@ -71,7 +71,12 @@
         </div>
 
         <!-- FORM PASIEN LAMA -->
-        <old-patient-form />
+        <old-patient-form v-if="store.components.state.isOldPatient"/>
+
+
+        <!-- FORM PASIEN BARU -->
+
+        
       </q-card>
 
       <dialog-confirm />

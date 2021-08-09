@@ -16,7 +16,7 @@ const state = reactive({
   isConfirm: false,
   todaySelected: false,
   today: function () {
-    return Date.now();
+    return new Date(Date.now()).getDate();
   },
 });
 

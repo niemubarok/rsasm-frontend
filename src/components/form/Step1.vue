@@ -13,7 +13,7 @@
           class="transparent q-mt-sm q-pa-sm"
           style="
             border-radius: 30px;
-            height: 250px;
+            height: 270px;
             border-right: 1px solid grey;
           "
         >
@@ -42,9 +42,9 @@
           <!-- :picture-url="store.doctor.state.selected().url" -->
           <card-doctor
             v-if="$route.params.id"
-            :doctor="store.doctor.state.selected().name"
-            :specialist="store.doctor.state.selected().specialist"
-            :time="store.doctor.state.selected().time"
+            :doctor="store.doctor.state.selected.nama"
+            :specialist="store.doctor.state.selected.specialist"
+            :time="store.doctor.state.selected.time"
           />
           <q-card-section
             v-if="!$route.params.id"
@@ -70,8 +70,10 @@
 </template>
 
 <script>
-import { inject, ref } from "vue";
+import { inject, ref, onMounted} from "vue";
 import CardDoctor from "../CardDoctor.vue";
+import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 
 export default {
   components: {
@@ -79,6 +81,8 @@ export default {
   },
   setup() {
     const store = inject("store");
+    const $q = useQuasar()
+    const router = useRouter()
     const showCard = ref(false);
     setTimeout(() => {
       showCard.value = true;
@@ -87,6 +91,14 @@ export default {
     setTimeout(() => {
       showNext.value = true;
     }, 500);
+
+    onMounted(()=>{
+      // console.log(router);
+      // console.log(Object.keys(store.doctor.state.selected).length == 0);
+      if(Object.keys(store.doctor.state.selected).length == 0){
+        router.push('/registration')
+      }
+    })
     return {
       store,
       showCard,

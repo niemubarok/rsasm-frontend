@@ -9,7 +9,7 @@
         style="z-index: 1"
         class="shadow-4"
         :class="
-          store.doctor.state.searchDate.value == store.components.state.today()
+          isToday
             ? 'bg-secondary text-white'
             : 'bg-grey-7 text-grey-2'
         "
@@ -94,7 +94,7 @@
     </div>
 
     <q-card
-      v-if="store.doctor.state.detail.length == 0"
+      v-if="Object.keys(store.doctor.state.filterDokter()).length == 0"
       flat
       tag="div"
       class="
@@ -112,8 +112,6 @@
       silahkan pilih tanggal lainnya
     </q-card>
 
-    <!-- {{ store.doctor.state.detail.value }} -->
-
     <carousel-doctor
       :scroll-area-style="style"
       style="height: 80vh; z-index: 1"
@@ -123,7 +121,7 @@
 
 <script>
 import CarouselDoctor from "./CarouselDoctor.vue";
-import { ref, inject, onMounted } from "vue";
+import { ref, inject, onMounted, onBeforeUnmount } from "vue";
 import { date } from "quasar";
 import Navigation from "./button/Navigation.vue";
 
@@ -138,17 +136,18 @@ export default {
 
     const store = inject("store");
     const chooseDateSelected = ref(false);
+   
 
     const todayBtn = () => {
-      // store.components.state.todaySelected = true;
-      const today = date.formatDate(Date.now(), "DD-MM-YYYY");
-      store.doctor.state.searchDate.value = today;
-      // console.log(today);
-      // return today
+      isToday.value = true
+      store.doctor.state.searchDate.value = Date.now();
+      store.doctor.state.getDataDokter();
     };
     const timeStamp = date.formatDate(Date.now(), "YYYY/MM/DD");
     const datePicker = ref(timeStamp);
-    const proxyDate = ref(timeStamp);
+    const proxyDate = ref(Date.now());
+     const isToday = ref(false)
+
     const kalenderLabel = () => {
       return date.formatDate(
         store.doctor.state.searchDate.value,
@@ -161,8 +160,6 @@ export default {
       // chooseDateSelected.value = true;
     };
     const optionFn = (proxyDate) => {
-      //  console.log(timeStamp);
-      // const date = new Date()
       const aWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
       return proxyDate >= timeStamp && new Date(proxyDate) <= aWeek;
     };
@@ -172,12 +169,22 @@ export default {
       store.components.state.todaySelected = false;
       store.doctor.state.searchDate.value = proxyDate.value;
       store.doctor.state.getDataDokter();
+      if(new Date(proxyDate.value).getDate() == new Date(Date.now()).getDate()){
+        isToday.value = true
+      }else{
+        isToday.value = false
+      }
     };
 
     onMounted(() => {
       store.doctor.state.searchDate.value = Date.now();
+      isToday.value = true
       store.doctor.state.getDataDokter();
     });
+    onBeforeUnmount(()=>{
+      const selectedDoctor= store.doctor.state.detail.value.find((dokter)=>dokter.id == store.doctor.state.doctorId())
+      store.doctor.state.selected = selectedDoctor
+    })
 
     return {
       todayBtn,
@@ -190,6 +197,7 @@ export default {
       optionFn,
       updateProxy,
       kalenderLabel,
+      isToday
     };
   },
 };
