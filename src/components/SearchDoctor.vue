@@ -8,11 +8,7 @@
         v-model:selected="store.components.state.todaySelected"
         style="z-index: 1"
         class="shadow-4"
-        :class="
-          isToday
-            ? 'bg-secondary text-white'
-            : 'bg-grey-7 text-grey-2'
-        "
+        :class="isToday ? 'bg-secondary text-white' : 'bg-grey-7 text-grey-2'"
         dark
         @click="todayBtn()"
         >Hari Ini</q-chip
@@ -60,7 +56,7 @@
       >
         <q-select
           v-model="store.doctor.state.searchSpecialist.value"
-          :options="store.doctor.state.clinicLists.value"
+          :options="store.doctor.state.clinicLists"
           dense
           class="q-pl-sm z-max"
         >
@@ -136,17 +132,16 @@ export default {
 
     const store = inject("store");
     const chooseDateSelected = ref(false);
-   
 
     const todayBtn = () => {
-      isToday.value = true
+      isToday.value = true;
       store.doctor.state.searchDate.value = Date.now();
       store.doctor.state.getDataDokter();
     };
     const timeStamp = date.formatDate(Date.now(), "YYYY/MM/DD");
     const datePicker = ref(timeStamp);
     const proxyDate = ref(Date.now());
-     const isToday = ref(false)
+    const isToday = ref(false);
 
     const kalenderLabel = () => {
       return date.formatDate(
@@ -169,22 +164,28 @@ export default {
       store.components.state.todaySelected = false;
       store.doctor.state.searchDate.value = proxyDate.value;
       store.doctor.state.getDataDokter();
-      if(new Date(proxyDate.value).getDate() == new Date(Date.now()).getDate()){
-        isToday.value = true
-      }else{
-        isToday.value = false
+      if (
+        new Date(proxyDate.value).getDate() == new Date(Date.now()).getDate()
+      ) {
+        isToday.value = true;
+      } else {
+        isToday.value = false;
       }
     };
 
     onMounted(() => {
       store.doctor.state.searchDate.value = Date.now();
-      isToday.value = true
+      isToday.value = true;
       store.doctor.state.getDataDokter();
+      // console.log(store.doctor.state.clinicLists);
+      store.doctor.state.getPoli();
     });
-    onBeforeUnmount(()=>{
-      const selectedDoctor= store.doctor.state.detail.value.find((dokter)=>dokter.id == store.doctor.state.doctorId())
-      store.doctor.state.selected = selectedDoctor
-    })
+    onBeforeUnmount(() => {
+      const selectedDoctor = store.doctor.state.detail.value.find(
+        (dokter) => dokter.id == store.doctor.state.doctorId()
+      );
+      store.doctor.state.selected = selectedDoctor;
+    });
 
     return {
       todayBtn,
@@ -197,7 +198,7 @@ export default {
       optionFn,
       updateProxy,
       kalenderLabel,
-      isToday
+      isToday,
     };
   },
 };
