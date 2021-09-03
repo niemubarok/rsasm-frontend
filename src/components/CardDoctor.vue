@@ -45,7 +45,7 @@ vue/require-prop-types */
             :style="$q.screen.lt.sm ? 'margin-right:-10%' : ''"
             class="bg-accent text-center text-light q-px-sm q-py-sm q-mt-sm"
             rounded
-            :label="specialist"
+            :label="'SPESIALIS '+specialist"
             text-color="primary"
             size="sm"
           />
@@ -79,7 +79,19 @@ vue/require-prop-types */
 import { inject } from "vue";
 export default {
   // eslint-disable-next-line vue/require-prop-types
-  props: ["id", "pictureUrl", "specialist", "doctor", "time"],
+  props: {id:{
+    default: null
+  }, 
+  pictureUrl:{
+    default:"img/dokter_placeholder.jpg"
+  }, 
+  specialist:{
+    default:null
+  }, doctor:{
+    default:null
+  }, time:{
+    default:null
+  }},
   setup() {
     const store = inject("store");
     const daftar = () => {

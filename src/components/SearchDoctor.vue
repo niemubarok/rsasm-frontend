@@ -1,7 +1,7 @@
 /* eslint-disable vue/no-v-html */
 <template>
   <q-card flat class="transparent card-search">
-    <div :style="$q.screen.gt.sm ? '' : 'margin-bottom:50px;'">
+    <div :style="!$q.screen.gt.sm ? '' : 'margin-top:10px;'">
       <navigation card-title="Cari Jadwal Dokter" />
       <q-space v-if="$q.screen.lt.sm" />
       <q-chip
@@ -44,38 +44,45 @@
           </q-date>
         </q-popup-proxy>
       </q-btn>
-      <q-btn
+      <q-chip
         dense
-        flat
         rounded
         color="grey-8"
         style="z-index: 2"
-        class="q-ml-xs text-weight-light"
-        label="filter klinik :"
+        class="q-ml-xs text-weight-light text-grey-1"
+        label="filter Spesialis :"
         no-caps
       >
         <q-select
           v-model="store.doctor.state.searchSpecialist.value"
-          :options="store.doctor.state.clinicLists"
+          :options="store.doctor.state.clinicLists.value"
           dense
-          class="q-pl-sm z-max"
+          color="grey-1"
+          label-color="red"
+          class="q-pl-sm z-max text-white"
+          clearable
+          @clear="onClear"
+          behavior="menu"
+          input-class="text-white"
+          style="width:200px"
+          dark
         >
-          <template #selected-item="scope">
+          <!-- color="white" -->
+          <!-- <template #selected-item="scope">
             <q-chip
               removable
               dense
-              :tabindex="store.doctor.state.searchSpecialist.value"
+              :tabindex="store.doctor.state.clinicLists.value"
               color="white"
               text-color="secondary"
               class="q-ma-none"
               style="z-index: 2"
               @remove="scope.removeAtIndex(scope.index)"
             >
-              <!-- {{ store.doctor.state.searchSpecialist.value }} -->
             </q-chip>
-          </template>
+          </template> -->
         </q-select>
-      </q-btn>
+      </q-chip>
     </div>
 
     <div>
@@ -102,7 +109,7 @@
         bg-grey-3
         transparent
       "
-      style="height: 60vh; z-index: 1"
+      style="height: 80vh; z-index: 1"
     >
       Dokter yang anda cari tidak tersedia,<br />
       silahkan pilih tanggal lainnya
@@ -110,7 +117,7 @@
 
     <carousel-doctor
       :scroll-area-style="style"
-      style="height: 80vh; z-index: 1"
+      style="height: 90vh; z-index: 1"
     />
   </q-card>
 </template>
@@ -173,6 +180,10 @@ export default {
       }
     };
 
+    const onClear = ()=>{
+      store.doctor.state.searchSpecialist.value = ""
+    }
+
     onMounted(() => {
       store.doctor.state.searchDate.value = Date.now();
       isToday.value = true;
@@ -199,6 +210,7 @@ export default {
       updateProxy,
       kalenderLabel,
       isToday,
+      onClear
     };
   },
 };

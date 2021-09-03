@@ -1,16 +1,19 @@
 <template>
   <q-layout view="lHh Lpr fFf" class="bg-grey-3">
-    <header-layout v-if="$q.screen.gt.sm" />
-    <footer-layout
+    <header-layout  />
+    <!-- <footer-layout
       v-if="$q.screen.lt.md && !store.components.state.searchBoxClicked"
-    />
+    /> -->
 
     <q-drawer
       v-model="store.components.state.leftDrawerOpen"
-      bordered
       behavior="mobile"
-      class="z-max"
+      bordered
+      width="120px"
+      class="z-max "
     >
+      <!-- mini="true" -->
+      <!-- style="width:120px;" -->
       <!-- :width="50+'px'" -->
       <!-- @click="store.components.state.leftDrawerOpen = false" -->
       <drawer />
@@ -33,7 +36,7 @@ import { inject } from "vue";
 
 export default {
   name: "GooglePhotosLayout",
-  components: { Drawer, HeaderLayout, FooterLayout },
+  components: { Drawer, HeaderLayout },
 
   setup() {
     const store = inject("store");

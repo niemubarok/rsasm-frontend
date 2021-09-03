@@ -1,5 +1,5 @@
 <template>
-  <div class="fit q-pt-xl q-px-sm column">
+  <div class="q-py-md column fit"  style="border-radius:40px;width:80px">
     <router-link to="/doctor/search" style="text-decoration: none">
       <q-btn
         flat
@@ -8,8 +8,8 @@
         stack
         no-caps
         size="26px"
-        class="GPL__side-btn"
       >
+        <!-- class="GPL__side-btn" -->
         <q-icon size="22px" name="schedule" />
         <div class="GPL__side-btn__label">Jadwal Dokter</div>
       </q-btn>

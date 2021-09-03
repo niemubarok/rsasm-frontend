@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-3">
+  <!-- <div class="col-md-3"> -->
     <div class="row no-wrap items-center">
       <!-- Dokter -->
       <transition
@@ -42,7 +42,7 @@
           <!-- :picture-url="store.doctor.state.selected().url" -->
           <card-doctor
             v-if="$route.params.id"
-            :doctor="store.doctor.state.selected.nama"
+            :doctor="store.doctor.state.selected.name"
             :specialist="store.doctor.state.selected.specialist"
             :time="store.doctor.state.selected.time"
           />
@@ -66,14 +66,14 @@
         </q-card>
       </transition>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
-import { inject, ref, onMounted} from "vue";
+import { inject, ref, onMounted } from "vue";
 import CardDoctor from "../CardDoctor.vue";
-import { useRouter } from 'vue-router';
-import { useQuasar } from 'quasar';
+import { useRouter } from "vue-router";
+import { useQuasar } from "quasar";
 
 export default {
   components: {
@@ -81,8 +81,8 @@ export default {
   },
   setup() {
     const store = inject("store");
-    const $q = useQuasar()
-    const router = useRouter()
+    const $q = useQuasar();
+    const router = useRouter();
     const showCard = ref(false);
     setTimeout(() => {
       showCard.value = true;
@@ -92,13 +92,14 @@ export default {
       showNext.value = true;
     }, 500);
 
-    onMounted(()=>{
-      // console.log(router);
-      // console.log(Object.keys(store.doctor.state.selected).length == 0);
-      if(Object.keys(store.doctor.state.selected).length == 0){
-        router.push('/registration')
+    onMounted(() => {
+      if (
+        store.doctor.state.selected == null ||
+        Object.keys(store.doctor.state.selected).length == 0
+      ) {
+        router.push("/registration");
       }
-    })
+    });
     return {
       store,
       showCard,

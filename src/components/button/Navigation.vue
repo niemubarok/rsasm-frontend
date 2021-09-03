@@ -1,20 +1,14 @@
 <template>
   <!-- :ripple="false" -->
   <router-link to="/" style="text-decoration: none">
-    <!-- <q-btn
+    <q-btn
       style="z-index: 2"
       flat
       rounded
       icon="home"
       color="grey-9"
-      @click="
-        [
-          (store.doctor.searchText.value = ''),
-          (store.doctor.isFiltered.value = false),
-          (store.components.state.searchBoxClicked = false),
-        ]
-      "
-    /> -->
+      @click="onClickHomeBtn"
+    />
   </router-link>
   <!-- $router.push('/'), -->
   <!-- log -->
@@ -60,9 +54,15 @@ export default {
       console.log("clicked");
     };
 
+    const onClickHomeBtn = () => {
+      store.doctor.searchText.value = "";
+      store.doctor.isFiltered.value = false;
+      store.components.state.searchBoxClicked = false;
+    };
     return {
       store,
       log,
+      onClickHomeBtn,
     };
   },
 };

@@ -15,8 +15,8 @@
         <!-- :picture-url="item.url" -->
         <card-doctor
           :id="item.id"
-          :doctor="item.nama"
-          :specialist="item.specialist"
+          :doctor="item.name"
+          :specialist="item.specialist()"
           :time="item.time"
         />
       </div>

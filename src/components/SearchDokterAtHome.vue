@@ -5,7 +5,7 @@
       <q-expansion-item
         class="shadow-1 overflow-hidden bg-primary"
         :class="!store.components.state.leftDrawerOpen ? 'z-top' : ''"
-        style="border-radius: 30px; width: 80vh"
+        style="border-radius: 30px; width: 100%;margin-bottom:-4vh"
         :style="
           $q.screen.lt.md && !store.components.state.searchBoxClicked
             ? 'width:100%;'
@@ -17,20 +17,8 @@
         expand-icon-class="text-grey-10"
         expand-icon="search"
         expanded-icon="close"
-        @show="
-          [
-            $nextTick(() => {
-              $refs.input.focus();
-            }),
-            (store.components.state.searchBoxClicked = true),
-          ]
-        "
-        @hide="
-          [
-            (store.doctor.searchText.value = ''),
-            (store.components.state.searchBoxClicked = false),
-          ]
-        "
+        @show="atShow"
+        @hide="atHide"
       >
         <!-- <q-scroll-observer @scroll="showScrollGuide = true" /> -->
         <!-- <template v-slot:header>
@@ -46,7 +34,7 @@
             <!-- search -->
             <q-input
               ref="input"
-              v-model="store.doctor.searchSpecialist.value"
+              v-model="store.doctor.state.searchSpecialist.value"
               autofocus
               class="q-mr-md"
               dense
@@ -56,7 +44,7 @@
             >
               <template #prepend>
                 <q-icon
-                  v-if="store.doctor.searchText.value === ''"
+                  v-if="store.doctor.state.searchText.value === ''"
                   name="search"
                 />
                 <!-- <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" /> -->
@@ -70,13 +58,27 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, nextTick, ref, onMounted } from "vue";
 export default {
   setup() {
     const store = inject("store");
+    const input = ref(null);
+    const atShow = () => {
+      nextTick(() => {
+        input.value.focus();
+      });
+      store.components.state.searchBoxClicked = true;
+    };
+    const atHide = () => {
+      store.doctor.state.searchText.value = "";
+      store.components.state.searchBoxClicked = false;
+    };
 
     return {
       store,
+      atShow,
+      atHide,
+      input,
     };
   },
 };

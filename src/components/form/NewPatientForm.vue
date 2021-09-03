@@ -4,99 +4,134 @@
     enter-active-class="animated fadeIn"
     leave-active-class="animated fadeOut"
   >
-    <!-- <div
-      v-show="
-        store.components.state.isOldPatient ||
-        store.components.state.isNewPatient
-      "
-      class="q-mt-sm"
-    > -->
-    <div class="row no-wrap items-center">
-      <q-card
-        flat
-        style="border-radius: 30px; border-top: 1px solid grey"
-        class="bg-grey-3 full-width q-pa-sm q-pb-md"
-      >
-        <!-- <q-icon name="forward" color="primary" size="50px"/> -->
-        <div>
-          <q-chip>Silahkan Lengkapi Data Pasien</q-chip>
-        </div>
-        <q-form @submit="onSubmit">
-          <div>
-            <q-input
-              ref="inputNik"
-              v-model="store.patient.oldPatientForm.nik"
-              mask="################"
-              :rules="formRules.nik"
-              clearable
-              class="q-mt-sm"
-              flat
-              label="NIK / No. KTP"
-            />
-            <q-input
-              v-model="store.patient.oldPatientForm.name"
-              clearable
-              class="q-mt-sm"
-              flat
-              label="Nama Lengkap Pasien Sesuai KTP"
-              :rules="formRules.nama"
-            />
-            <q-input
-              v-model="store.patient.oldPatientForm.birthDate"
-              :rules="formRules.tglLahir"
-              clearable
-              :hint="
-                !$q.platform.is.mobile
-                  ? 'Tanggal Lahir (contoh: 20/09/1992)'
-                  : ''
-              "
-              :label="$q.platform.is.mobile ? 'Tanggal Lahir' : ''"
-              type="date"
-              mask="##/##/####"
-            >
-              <!-- <template #label>
-                  <div class="row items-end all-pointer-events q-ml-xl q-pl-xl">
-                    Tanggal Lahir
+    <q-form @submit="onSubmit">
+      <div>
+        <!-- jk -->
+        <q-chip
+          ><q-badge
+            style="margin-left: -10px"
+            rounded
+            class="q-pa-xs bg-grey-7 text-grey-1"
+          >
+            Jenis Kelamin
+          </q-badge>
+          <q-radio
+            size="30px"
+            label="L"
+            val="L"
+            v-model="store.patient.detail.jk"
+          >
+          </q-radio>
+          <q-radio
+            size="30px"
+            label="P"
+            val="P"
+            v-model="store.patient.detail.jk"
+          ></q-radio>
+        </q-chip>
+        <!-- <div> -->
+        <!-- gol_darah //enum('A', 'B', 'O', 'AB', '-') -->
+        <q-chip>
+          <q-badge
+            style="margin-left: -10px"
+            rounded
+            class="q-pa-xs bg-grey-7 text-grey-1"
+            >Golongan Darah</q-badge
+          >
 
-                    <q-tooltip
-                      class="bg-grey-8"
-                      anchor="top left"
-                      self="bottom left"
-                      :offset="[0, 8]"
-                      >Tanggal Lahir</q-tooltip
-                    >
-                  </div>
-                </template> -->
-            </q-input>
-            <q-input
-              v-model="store.patient.oldPatientForm.phone"
-              clearable
-              mask="####-####-####"
-              class="q-mt-sm"
-              flat
-              label="No. Whatsapp"
-              :rules="formRules.HP"
-              hint="Kami akan mengirimkan detail pendaftaran via whatsapp"
-            />
-          </div>
-          <div class="row flex items-end">
-            <div class="col">
-              <q-btn
-                push
-                type="submit"
-                rounded
-                color="primary"
-                text-color="accent"
-                class="q-mt-md"
-                label="Konfirmasi"
-                @click="onSubmit"
-              />
-            </div>
-          </div>
-        </q-form>
-      </q-card>
-    </div>
-    <!-- </div> -->
+          <q-option-group
+            v-model="store.patient.detail.gol_darah"
+            :options="options.golonganDarah"
+            inline
+          />
+        </q-chip>
+
+        <!-- stts_nikah //enum('BELUM MENIKAH', 'MENIKAH', 'JANDA', 'DUDHA', -->
+        <q-chip>
+          <q-badge
+            style="margin-left: -10px"
+            rounded
+            class="q-pa-xs q-mr-sm bg-grey-7 text-grey-1"
+          >
+            Status Nikah
+          </q-badge>
+
+          <q-select
+            dense
+            v-model="store.patient.detail.stts_nikah"
+            :options="['BELUM MENIKAH', 'MENIKAH', 'JANDA', 'DUDHA']"
+          ></q-select>
+        </q-chip>
+
+        <!-- agama -->
+        <q-chip>
+          <q-badge
+            style="margin-left: -10px"
+            rounded
+            class="q-pa-xs q-mr-sm bg-grey-7 text-grey-1"
+          >
+            Agama
+          </q-badge>
+
+          <q-select
+            dense
+            v-model="store.patient.detail.agama"
+            :options="options.agama"
+          ></q-select>
+        </q-chip>
+
+        <!-- tmp_lahir -->
+        <q-input
+          dense
+          rounded
+          v-model="store.patient.detail.tmp_lahir"
+          label="Tempat Lahir"
+        ></q-input>
+
+        <!-- alamat -->
+        <q-input
+          dense
+          v-model="store.patient.detail.alamat"
+          label="Alamat Pasien"
+        ></q-input>
+
+        <!-- pekerjaan -->
+        <q-input label="Pekerjaan" v-model="store.patient.detail.pekerjaan" />
+
+        <!-- nm_ibu, -->
+        <q-input
+          dense
+          v-model="store.patient.detail.nm_ibu"
+          label="Nama Ibu Kandung"
+        ></q-input>
+
+        <!-- <q-chip>Data Keluarga/ Penanggung</q-chip> -->
+        <!-- namakeluarga -->
+        <q-input
+          v-model="store.patient.detail.namakeluarga"
+          label="Nama Penanggung"
+        ></q-input>
+        <!-- keluarga //enum('AYAH', 'IBU', 'ISTRI', 'SUAMI', 'SAUDARA' -->
+        <q-chip>
+          <q-badge
+            style="margin-left: -10px"
+            rounded
+            class="q-pa-xs q-mr-sm bg-grey-7 text-grey-1"
+          >
+            Hubungan dengan Penanggung
+          </q-badge>
+
+          <q-select
+            dense
+            v-model="store.patient.detail.keluarga"
+            :options="options.statusNikah"
+          ></q-select>
+        </q-chip>
+        <!-- </div> -->
+      </div>
+
+      <q-btn type="submit" label="Konfirmasi" color="secondary" rounded></q-btn>
+    </q-form>
   </transition>
 
   <!-- CONFIRM -->
@@ -110,6 +145,29 @@ export default {
   components: { DialogConfirm },
   setup() {
     const store = inject("store");
+    const options = {
+      golonganDarah: [
+        {
+          label: "A",
+          value: "A",
+        },
+        {
+          label: "B",
+          value: "B",
+        },
+        {
+          label: "AB",
+          value: "AB",
+        },
+        {
+          label: "O",
+          value: "O",
+        },
+      ],
+      agama: ["ISLAM", "KRISTEN", "KATHOLIK", "HINDU", "BUDDHA", "KONGHUCU"],
+      statusNikah: ["AYAH", "IBU", "ISTRI", "SUAMI", "SAUDARA"],
+    };
+
     const formRules = {
       nik: [
         (val) => !!val || "Mohon masukan NIK",
@@ -128,6 +186,7 @@ export default {
       store,
       onSubmit,
       formRules,
+      options,
     };
   },
 };

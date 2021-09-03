@@ -16,27 +16,31 @@
         <table>
           <tr>
             <td>NIK</td>
-            <td>: {{ store.patient.oldPatientForm.nik }}</td>
+            <td>: {{ store.patient.detail.nik }}</td>
           </tr>
           <tr>
             <td>Nama Pasien</td>
-            <td>: {{ store.patient.oldPatientForm.name }}</td>
+            <td>: {{ store.patient.detail.name }}</td>
           </tr>
           <tr>
             <td>Tgl. Lahir</td>
-            <td>: {{ TglLahir }}</td>
+            <td>: {{ store.patient.formattedBirthDate() }}</td>
           </tr>
           <tr>
             <td>No. HP</td>
-            <td>: {{ store.patient.oldPatientForm.phone }}</td>
+            <td>: {{ store.patient.detail.phone }}</td>
           </tr>
           <tr>
             <td>Dokter Tujuan</td>
-            <td>: {{ store.doctor.selected().name }}</td>
+            <td>: {{ store.doctor.state.selected.name }}</td>
           </tr>
           <tr>
             <td>Klinik</td>
-            <td>: {{ store.doctor.selected().specialist }}</td>
+            <td>: {{ store.doctor.state.selected.specialist }}</td>
+          </tr>
+          <tr>
+            <td>Jenis Bayar</td>
+            <td>: {{ store.patient.detail.jnsBayar }}</td>
           </tr>
         </table>
       </q-card-section>
@@ -77,28 +81,27 @@
 
 <script>
 import { useQuasar, date } from "quasar";
-import { inject, reactive, ref, useRoute } from "vue";
+import { inject, reactive, ref, onBeforeMount } from "vue";
+import axios from 'axios'
 
 export default {
   setup() {
     const $q = useQuasar();
 
     const store = inject("store");
-    const TglLahir = date.formatDate(
-      store.patient.oldPatientForm.birthDate,
-      "DD MMMM YYYY"
-    );
+    const TglLahir = ref("");
+
     const confirmPatientData = reactive({
-      NIK: store.patient.oldPatientForm.nik,
-      Nama: store.patient.oldPatientForm.name,
-      "Tgl. Lahir": store.patient.oldPatientForm.birthDate,
-      "No. HP": store.patient.oldPatientForm.phone,
+      NIK: store.patient.detail.nik,
+      Nama: store.patient.detail.name,
+      "Tgl. Lahir": store.patient.detail.birthDate,
+      "No. HP": store.patient.detail.phone,
     });
     const accept = ref(false);
 
     const onclosePopUp = () => {
       store.components.state.isConfirm = false;
-      accept = false;
+      accept.value = false;
     };
 
     const onSubmit = () => {
@@ -110,16 +113,39 @@ export default {
           message: "You need to accept the license and terms first",
         });
       } else {
-        $q.notify({
-          color: "green-4",
-          textColor: "white",
-          icon: "cloud_done",
-          message: "Submitted",
-        });
+        // console.log(process.env.API_ENDPOINT);
+        
+        axios.post(process.env.API_ENDPOINT+"pasien/store",
+        {
+          data:{
+            pasien: store.patient.detail
+          }
+        })
+        .then((res)=>{
+          if(res.status == 201){ //JIKA BERHASIL MASUK DATABASE
 
-        $router.push("/registration/registered");
+          //TAMPILKAN NOTIFIKASI
+            $q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              message: "Submitted",
+            });
+
+            //REDIRECT KE HALAMAN REGISTERED DENGAN DATA DARI BACKEND
+            $router.push("/registration/registered");
+          }
+        })
+
       }
     };
+
+    onBeforeMount(()=>{
+         () => {
+      store.patient.tgl_daftar = date.formatDate(new Date(), "YYYY-MM-DD");
+    }
+      
+    })
 
     return {
       confirmPatientData,

@@ -31,22 +31,19 @@
       <step-1 />
 
       <!-- Step 2 -->
-      <!-- <div v-if="!$route.params.id" v-show="showNext" class="col-md q-ml-sm"> -->
-      <!-- <skeleton-detail-pasien /> -->
       <step-2 />
-      <!-- </div> -->
-      <transition
-        appear
-        enter-active-class="animated fadeInDown"
-        leave-active-class="animated fadeOut"
-      >
-        <div v-if="$route.params.id" v-show="showNext" class="col-md q-ml-sm">
-          <!-- SKELETONDATAPASIEN -->
-          <!-- <form-pasien-skeleton /> -->
-          <dialog-confirm />
-        </div>
-      </transition>
     </div>
+    <transition
+      appear
+      enter-active-class="animated fadeInDown"
+      leave-active-class="animated fadeOut"
+    >
+      <div v-if="$route.params.id" v-show="showNext" class="col-md q-ml-sm">
+        <!-- SKELETONDATAPASIEN -->
+        <dialog-confirm />
+      </div>
+    </transition>
+    <!-- </div> -->
   </q-card>
 </template>
 

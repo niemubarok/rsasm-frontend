@@ -6,9 +6,9 @@ import axios from "axios";
 
 const state = {
   detail: ref([]),
-  clinicLists: ref(["Gigi", "Internis", "Kandungan", "Mata"]),
+  clinicLists: ref([]),
   searchText: ref(""),
-  searchSpecialist: ref(null),
+  searchSpecialist: ref(""),
   searchDate: ref(""),
   isFiltered: ref(false),
   tempPoli: ref([]),
@@ -17,20 +17,28 @@ const state = {
     if (Object.keys(state.getDoctorFromSessionStorage).length != 0) {
       return Object.values(state.getDoctorFromSessionStorage).filter(
         (dokter) => {
-          const selectedSpecialist =
-            state.searchSpecialist.value !== null
-              ? state.searchSpecialist.value
-              : "";
-          return dokter.specialist.includes(selectedSpecialist);
+          return (
+            dokter
+              .specialist()
+              .toUpperCase()
+              .includes(state.searchSpecialist.value.toUpperCase()) ||
+            dokter.name
+              .toUpperCase()
+              .includes(state.searchSpecialist.value.toUpperCase())
+          );
         }
       );
     } else {
       return state.detail.value.filter((dokter) => {
-        const selectedSpecialist =
-          state.searchSpecialist.value !== null
-            ? state.searchSpecialist.value
-            : "";
-        return dokter.specialist.includes(selectedSpecialist);
+        return (
+          dokter
+            .specialist()
+            .toUpperCase()
+            .includes(state.searchSpecialist.value.toUpperCase()) ||
+          dokter.name
+            .toUpperCase()
+            .includes(state.searchSpecialist.value.toUpperCase())
+        );
       });
     }
   },
@@ -49,22 +57,35 @@ const state = {
     const dayNumber = new Date(state.searchDate.value).getDay();
 
     state.detail.value = [];
-    state.clinicLists.value = [];
+    // state.clinicLists.value = [];
 
     axios
-      .post("http://127.0.0.1:3333/api/dokter", {
-        data: {
-          hari: dayNumber,
+      .post(
+        "http://192.168.7.250:3333/api/dokter",
+        {
+          data: {
+            hari: dayNumber,
+          },
         },
-      })
+        {
+          headers: { "Access-Control-Allow-Origin": "*" },
+        }
+      )
       .then((res) => {
         // console.log([...new Set(res.data.data)]);
+        state.clinicLists.value = Object.values(res.data.data)
+          .map((item) => item.nm_poli.replace("POLI", ""))
+          .filter((value, index, self) => self.indexOf(value) == index);
+
+        // console.log(listPoli);
         return Object.values(res.data.data).forEach((dokter) => {
           if (dokter) {
             const detail = {
               id: dokter.kd_dokter,
-              nama: dokter.nm_dokter,
-              specialist: dokter.nm_poli,
+              name: dokter.nm_dokter,
+              specialist: () => {
+                return dokter.nm_poli.replace("POLI", "");
+              },
               date: state.searchDate.value,
               time: {
                 start: dokter.jam_mulai,
@@ -72,7 +93,9 @@ const state = {
               },
             };
 
-            state.tempPoli.value.push(dokter.nm_poli);
+            state.tempPoli.value.push(
+              dokter.nm_poli.replace("POLI", "SPESIALIS")
+            );
             state.detail.value.push(detail);
             SessionStorage.set("doctor", detail);
           } else {
@@ -88,7 +111,6 @@ const state = {
   getPoli: () => {
     axios.post("http://127.0.0.1:3333/api/poli").then((res) => {
       res.data.data.filter((each) => {
-       
         // console.log(each.nama_poli.includes(state.tempPoli.value));
       });
     });

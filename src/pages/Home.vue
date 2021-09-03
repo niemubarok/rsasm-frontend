@@ -8,7 +8,11 @@
   <!-- <div class="bg-primary"></div> -->
 
   <!-- LIST DOKTER YANG PRAKTEK HARI INI -->
-  <div class="rounded-borders" :class="$q.screen.gt.sm ? 'q-mx-lg' : ''">
+  <div
+    class="rounded-borders q-mt-md"
+    :class="$q.screen.gt.sm ? 'q-mx-lg' : ''"
+  >
+    <search-dokter-at-home />
     <carousel-doctor
       :scroll-area-style="scrollArea()"
       :row-class="
@@ -52,32 +56,33 @@
 
 <script>
 import Banner from "src/components/Banner.vue";
-import { ref, inject } from "vue";
+import { ref, inject, onMounted } from "vue";
 // import CardDoctor from 'src/components/CardDoctor.vue'
-// import PartnerLogo from "src/components/PartnerLogo.vue";
+import PartnerLogo from "src/components/PartnerLogo.vue";
 import CarouselDoctor from "src/components/CarouselDoctor.vue";
 import { useQuasar } from "quasar";
 import Article from "src/components/Article.vue";
-// import InfoHeader from "components/InfoHeader.vue"
+import InfoHeader from "components/InfoHeader.vue"
 // import {getDataDokter} from '/store'
+import SearchDokterAtHome from "src/components/SearchDokterAtHome.vue";
 
 export default {
   components: {
     Banner,
-    // PartnerLogo,
+    PartnerLogo,
     CarouselDoctor,
     // Article
+    SearchDokterAtHome,
   },
   setup() {
     const $q = useQuasar();
     const scrollArea = () => {
-      console.log("scrollArea");
       if (store.components.state.searchBoxClicked) {
-        return "height:90vh";
+        return "height:90vh;width:87vw";
       } else if ($q.platform.is.mobile) {
         return "height:30vh;";
       }
-      return "height:35vh;padding-top: 10px; margin-top: -5vh";
+      return "height:50vh;padding-top: 10px; margin-top: -7vh";
     };
 
     function setFocus() {
@@ -87,9 +92,10 @@ export default {
     const store = inject("store");
 
     const show = ref(true);
-
-
-
+    onMounted(() => {
+      store.doctor.state.searchDate.value = Date.now();
+      store.doctor.state.getDataDokter();
+    });
     return {
       scrollArea,
       show,

@@ -25,7 +25,7 @@
           <div>
             <q-input
               ref="inputNik"
-              v-model="store.patient.oldPatientForm.nik"
+              v-model="store.patient.detail.nik"
               mask="################"
               :rules="formRules.nik"
               clearable
@@ -34,7 +34,7 @@
               label="NIK / No. KTP"
             />
             <q-input
-              v-model="store.patient.oldPatientForm.name"
+              v-model="store.patient.detail.name"
               clearable
               class="q-mt-sm"
               flat
@@ -42,34 +42,39 @@
               :rules="formRules.nama"
             />
             <q-input
-              v-model="store.patient.oldPatientForm.birthDate"
+              v-model="store.patient.detail.birthDate"
               :rules="formRules.tglLahir"
               clearable
               :hint="
-                !$q.platform.is.mobile
+                $q.screen.gt.sm
                   ? 'Tanggal Lahir (contoh: 20/09/1992)'
-                  : ''
+                  : 'Tanggal Lahir'
               "
               :label="$q.platform.is.mobile ? 'Tanggal Lahir' : ''"
               type="date"
               mask="##/##/####"
             >
-              <!-- <template #label>
-                  <div class="row items-end all-pointer-events q-ml-xl q-pl-xl">
-                    Tanggal Lahir
-
-                    <q-tooltip
-                      class="bg-grey-8"
-                      anchor="top left"
-                      self="bottom left"
-                      :offset="[0, 8]"
-                      >Tanggal Lahir</q-tooltip
-                    >
-                  </div>
-                </template> -->
             </q-input>
+
+            <!-- TOMBOL CEK APAKAH PASIEN SUDAH PERNAH BEROBAT ATAU BELUM -->
+            <q-btn
+              class="q-mt-md bg-primary"
+              :class="btnCheckClass"
+              :label="btnCheckLabel"
+              @click="btnCheckPatientData"
+              :style="btnCheckStyle"
+              type="submit"
+            >
+              <q-spinner-cube
+                v-if="isSearching"
+                color="secondary"
+                size="md"
+                class="q-ml-sm"
+              />
+            </q-btn>
+
             <q-input
-              v-model="store.patient.oldPatientForm.phone"
+              v-model="store.patient.detail.phone"
               clearable
               mask="####-####-####"
               class="q-mt-sm"
@@ -78,6 +83,32 @@
               :rules="formRules.HP"
               hint="Kami akan mengirimkan detail pendaftaran via whatsapp"
             />
+
+            <div class="q-mt-lg">
+              <span class="text-subtitle">Jenis Bayar</span>
+              <div>
+                <q-radio
+                  v-model="store.patient.detail.jnsBayar"
+                  label="BPJS"
+                  val="BPJS"
+                >
+                </q-radio>
+                <q-radio
+                  v-model="store.patient.detail.jnsBayar"
+                  label="UMUM"
+                  val="UMUM"
+                  color="green"
+                >
+                </q-radio>
+                <q-radio
+                  v-model="store.patient.detail.jnsBayar"
+                  label="ASURANSI"
+                  val="ASURANSI"
+                  color="blue"
+                >
+                </q-radio>
+              </div>
+            </div>
           </div>
           <div class="row flex items-end">
             <div class="col">
@@ -104,11 +135,16 @@
 </template>
 
 <script>
-import { inject } from "vue";
+import { inject, ref } from "vue";
 import DialogConfirm from "./DialogConfirm.vue";
+import axios from "axios";
 export default {
   components: { DialogConfirm },
   setup() {
+    const isSearching = ref(false);
+    const btnCheckLabel = ref("Cek Data Pasien");
+    const btnCheckClass = ref("");
+    const btnCheckStyle = ref("");
     const store = inject("store");
     const formRules = {
       nik: [
@@ -120,6 +156,48 @@ export default {
       HP: [(val) => val.length > 6 || "Masukan nomor Whatsapp yang valid"],
     };
 
+    const btnCheckPatientData = () => {
+      // console.log(store.patient.detail.nik);
+      if (
+        store.patient.detail.nik != "" &&
+        store.patient.detail.name != "" &&
+        store.patient.detail.birthDate != ""
+      ) {
+        isSearching.value = true;
+
+        axios
+          .post(
+            "http://192.168.7.250:3333/api/pasien",
+            {
+              noKtp: store.patient.detail.nik,
+              namaPasien: store.patient.detail.name,
+              tglLahir: store.patient.detail.birthDate,
+            },
+            {
+              headers: { "Access-Control-Allow-Origin": "*" },
+            }
+          )
+          .then((res) => {
+            // console.log(res.data.data);
+            // console.log(res);
+            if (res.status == 200) {
+              if (res.data.isPasienBaru) {
+                isSearching.value = false;
+                btnCheckLabel.value = `Data Pasien tidak ditemukan`;
+                btnCheckClass.value = "bg-red"
+              }
+              isSearching.value = false;
+              store.patient.detail.name = res.data.data.nama_pasien;
+              // btnCheckStyle.value = ""
+              btnCheckClass.value = "bg-secondary text-white";
+              btnCheckLabel.value = `Data ditemukan dengan No. RM:${res.data.data.no_rm}`;
+            } else {
+              console.log("error");
+            }
+          });
+      }
+    };
+
     const onSubmit = () => {
       store.components.state.isConfirm = true;
       store.components.state.dialogConfirm = true;
@@ -128,6 +206,11 @@ export default {
       store,
       onSubmit,
       formRules,
+      isSearching,
+      btnCheckPatientData,
+      btnCheckClass,
+      btnCheckLabel,
+      btnCheckStyle,
     };
   },
 };

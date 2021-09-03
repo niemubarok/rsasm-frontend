@@ -13,7 +13,7 @@
           height="50px"
           style="max-width: 50px"
         />
-        <!-- <router-link to="/" style="text-decoration:none"> -->
+        <router-link to="/" style="text-decoration:none">
           <q-toolbar-title
             v-if="$q.screen.gt.sm"
             shrink
@@ -24,8 +24,9 @@
               <span style="color: #f9a602"> Ali Sibroh Malisi</span></strong
             >
           </q-toolbar-title>
-        <!-- </router-link> -->
+        </router-link>
 
+        <q-space />
         <!-- <q-space /> -->
 
         <!-- search -->
