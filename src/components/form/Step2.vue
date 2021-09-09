@@ -4,10 +4,10 @@
     enter-active-class="animated fadeInDown"
     leave-active-class="animated fadeOut"
   >
-    <div v-if="$route.params.id" v-show="showNext" class="col-md-8 q-ml-sm" >
+    <div v-if="$route.params.id" v-show="showNext" class="col-md-8 q-ml-sm">
       <q-card
-        class="transparent q-mt-sm q-pa-sm"
-        style="border-radius: 30px"
+        class="transparent q-mt-sm q-pa-sm no-shadow flat"
+        style="border-radius: 30px; border-left: 1px solid grey"
       >
         <!-- :style="
           $q.screen.gt.md 
@@ -76,18 +76,20 @@
                         ? 'Tanggal Lahir (contoh: 20/09/1992)'
                         : ''
                     "
-                    type="date"
                     mask="##/##/####"
                     :label="!$q.platform.is.desktop ? 'Tanggal Lahir' : ''"
+                    type="date"
                   >
+                    <!-- type="date" -->
                   </q-input>
-                  
+
                   <!-- WHATSAPP -->
                   <q-input
                     dense
                     v-model="store.patient.detail.phone"
                     clearable
                     mask="####-####-####"
+                    unmasked-value
                     class="q-mt-sm"
                     flat
                     label="No. Whatsapp"
@@ -130,6 +132,7 @@
                         v-model="store.patient.detail.noBPJS"
                         label="Nomor Kartu BPJS"
                         mask="######################"
+                        :lazy-rules="formRules.jnsBayar"
                       ></q-input>
                     </div>
                   </div>
@@ -141,10 +144,14 @@
                   rounded
                   :class="btnCheckClass"
                   label="Selanjutnya"
-                  @click="onClickBtnCheckPatientData"
                   :style="btnCheckStyle"
                   type="submit"
+                  :disable="
+                    store.patient.detail.nik == '' ||
+                    store.patient.detail.name == ''
+                  "
                 >
+                  <!-- @click="onClickBtnCheckPatientData" -->
                   <q-spinner-cube
                     v-if="isSearching"
                     color="secondary"
@@ -197,16 +204,19 @@
       </q-card>
 
       <dialog-confirm />
+      <!-- {{store.patient.detail.tgl_periksa}}
+      {{store.doctor.state.searchDate.value}} -->
     </div>
   </transition>
 </template>
 
 <script>
-import { ref, inject } from "vue";
+import { ref, inject, onMounted } from "vue";
 // import OldPatientForm from "../form/OldPatientForm.vue";
 import NewPatientForm from "../form/NewPatientForm.vue";
 import DialogConfirm from "../form/DialogConfirm.vue";
 import axios from "axios";
+import { date } from "quasar";
 
 export default {
   // name: 'ComponentName',
@@ -242,12 +252,34 @@ export default {
         (val) => val.length >= 16 || "Angka yang anda masukan kurang",
       ],
       nama: [(val) => !!val || "Masukkan Nama Lengkap"],
-      tglLahir: [(val) => val !== "" || "Tanggal Lahir Wajib Diisi!"],
+      tglLahir: [
+        (val) => val !== "" || "Tanggal Lahir Wajib Diisi!",
+        (val) => {
+          const givenYear = new Date(val).getFullYear();
+          const currentYear = new Date(Date.now()).getFullYear();
+          return (
+            givenYear <= currentYear ||
+            "tanggal lahir salah (lebih dari tahun " + currentYear + ")"
+          );
+        },
+      ],
       HP: [(val) => val.length > 6 || "Masukan nomor Whatsapp yang valid"],
+      jnsBayar: [
+        (val) =>
+          val.length > 3 || "Sobat memilih pakai bpjs, mohon diisi nomornya",
+      ],
+    };
+
+    const disableBtnCheckPatientData = () => {
+      return (
+        store.patient.detail.nik == "" ||
+        store.patient.detail.name == "" ||
+        store.patient.detail.birthDate == ""
+      );
     };
 
     const onClickBtnCheckPatientData = () => {
-      console.log(store.patient.detail.birthDate);
+      // console.log(store.patient.detail.birthDate);
 
       if (
         store.patient.detail.nik != "" &&
@@ -274,7 +306,7 @@ export default {
               if (!res.data.isPasienBaru) {
                 isSearching.value = false;
                 store.patient.detail.name = res.data.data.nama_pasien;
-                store.patient.detail.birthDate = res.data.data.tgl_lahir;
+                store.patient.detail.isPasienBaru = false
                 store.components.state.dialogConfirm = true;
               } else {
                 isSearching.value = false;
@@ -292,6 +324,13 @@ export default {
       store.components.state.isConfirm = true;
       store.components.state.dialogConfirm = true;
     };
+
+    onMounted(() => {
+      store.patient.detail.tgl_periksa = date.formatDate(
+        new Date(store.doctor.state.searchDate.value),
+        "YYYY-MM-DD"
+      );
+    });
 
     // const showFormPasienLama = () => {
     //   store.components.state.formEditing = true;
@@ -319,15 +358,16 @@ export default {
       showCard,
       expanded,
       showNext,
-      test,
-      onSubmit,
       formRules,
       isSearching,
-      onClickBtnCheckPatientData,
       btnCheckClass,
       btnCheckLabel,
       btnCheckStyle,
       morphBtnCheck,
+      test,
+      onSubmit,
+      onClickBtnCheckPatientData,
+      disableBtnCheckPatientData,
       // showFormPasienLama,
       // hideFormPasienLama,
       // showFormPasienBaru,

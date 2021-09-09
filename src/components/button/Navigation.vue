@@ -55,8 +55,8 @@ export default {
     };
 
     const onClickHomeBtn = () => {
-      store.doctor.searchText.value = "";
-      store.doctor.isFiltered.value = false;
+      store.doctor.state.searchText.value = "";
+      store.doctor.state.isFiltered.value = false;
       store.components.state.searchBoxClicked = false;
     };
     return {

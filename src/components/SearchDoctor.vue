@@ -64,7 +64,7 @@
           @clear="onClear"
           behavior="menu"
           input-class="text-white"
-          style="width:200px"
+          style="width: 200px"
           dark
         >
           <!-- color="white" -->
@@ -171,6 +171,10 @@ export default {
       store.components.state.todaySelected = false;
       store.doctor.state.searchDate.value = proxyDate.value;
       store.doctor.state.getDataDokter();
+      store.patient.detail.tgl_periksa = date.formatDate(
+        new Date(proxyDate.value),
+        "YYYY-MM-DD"
+      );
       if (
         new Date(proxyDate.value).getDate() == new Date(Date.now()).getDate()
       ) {
@@ -180,9 +184,9 @@ export default {
       }
     };
 
-    const onClear = ()=>{
-      store.doctor.state.searchSpecialist.value = ""
-    }
+    const onClear = () => {
+      store.doctor.state.searchSpecialist.value = "";
+    };
 
     onMounted(() => {
       store.doctor.state.searchDate.value = Date.now();
@@ -191,12 +195,12 @@ export default {
       // console.log(store.doctor.state.clinicLists);
       store.doctor.state.getPoli();
     });
-    onBeforeUnmount(() => {
-      const selectedDoctor = store.doctor.state.detail.value.find(
-        (dokter) => dokter.id == store.doctor.state.doctorId()
-      );
-      store.doctor.state.selected = selectedDoctor;
-    });
+    // onBeforeUnmount(() => {
+    //   const selectedDoctor = store.doctor.state.detail.value.find(
+    //     (dokter) => dokter.id == store.doctor.state.doctorId()
+    //   );
+    //   store.doctor.state.selected = selectedDoctor;
+    // });
 
     return {
       todayBtn,
@@ -210,7 +214,7 @@ export default {
       updateProxy,
       kalenderLabel,
       isToday,
-      onClear
+      onClear,
     };
   },
 };

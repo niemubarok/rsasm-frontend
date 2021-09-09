@@ -39,10 +39,14 @@ const data = reactive({
     kd_prop: "1",
     propinsipj: "-",
     isPasienBaru: false,
-    tgl_daftar:null
+    tgl_daftar: null,
+    tgl_periksa: "",
   },
   formattedBirthDate: () => {
     return date.formatDate(new Date(data.detail.birthDate), "DD MMMM YYYY");
+  },
+  formattedTglPeriksa: () => {
+    return date.formatDate(new Date(data.detail.tgl_periksa), "DD MMMM YYYY");
   },
 });
 

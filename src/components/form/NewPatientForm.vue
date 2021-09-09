@@ -75,6 +75,7 @@
 
           <q-select
             dense
+            behavior="menu"
             v-model="store.patient.detail.agama"
             :options="options.agama"
           ></q-select>
@@ -123,14 +124,39 @@
 
           <q-select
             dense
+            behavior="menu"
             v-model="store.patient.detail.keluarga"
             :options="options.statusNikah"
           ></q-select>
         </q-chip>
         <!-- </div> -->
       </div>
-
-      <q-btn type="submit" label="Konfirmasi" color="secondary" rounded></q-btn>
+      <span style="width: 200px">
+        <q-btn
+          ref="btnKonfirmasi"
+          type="submit"
+          :label="disableBtnKonfirmasi() ? 'Data Belum Lengkap':'Konfirmasi'"
+          :color="disableBtnKonfirmasi()? 'grey-5':'secondary'"
+          :class="disableBtnKonfirmasi() ? 'text-grey-9':''"
+          rounded
+          :disable="disableBtnKonfirmasi()"
+        >
+        </q-btn>
+        <q-tooltip
+          v-if="disableBtnKonfirmasi()"
+          class="bg-red"
+          >Upps.. masih ada data yang belum lengkap
+        </q-tooltip>
+      </span>
+      <!-- {{"jk" + store.patient.detail.jk == ''}} <br />
+      {{ "tmplahir" + store.patient.detail.tmp_lahir == ''}} <br />
+      {{"nm ibu" + store.patient.detail.nm_ibu == ''}} <br />
+      {{"alamat" + store.patient.detail.alamat == ''}} <br />
+      {{"dara" + store.patient.detail.gol_darah == ''}} <br />
+      {{"peke" + store.patient.detail.pekerjaan == ''}} <br />
+      {{"stts" + store.patient.detail.stts_nikah == ''}} <br />
+      {{"agama" + store.patient.detail.agama == ''}} <br />
+      {{"umum" + store.patient.detail.umur == ''}} -->
     </q-form>
   </transition>
 
@@ -178,6 +204,23 @@ export default {
       HP: [(val) => val.length > 6 || "Masukan nomor Whatsapp yang valid"],
     };
 
+    const disableBtnKonfirmasi = () => {
+      if (
+            store.patient.detail.jk == '' ||
+            store.patient.detail.tmp_lahir == '' ||
+            store.patient.detail.nm_ibu == '' ||
+            store.patient.detail.alamat == '' ||
+            store.patient.detail.gol_darah == '' ||
+            store.patient.detail.pekerjaan == '' ||
+            store.patient.detail.stts_nikah == '' ||
+            store.patient.detail.agama == '' ||
+            store.patient.detail.keluarga == '' ||
+            store.patient.detail.namakeluarga == ''
+      ) {
+        return true;
+      }
+      return false;
+    };
     const onSubmit = () => {
       store.components.state.isConfirm = true;
       store.components.state.dialogConfirm = true;
@@ -187,6 +230,7 @@ export default {
       onSubmit,
       formRules,
       options,
+      disableBtnKonfirmasi,
     };
   },
 };

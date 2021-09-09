@@ -61,7 +61,7 @@ const state = {
 
     axios
       .post(
-        "http://192.168.7.250:3333/api/dokter",
+        process.env.API_ENDPOINT + "dokter",
         {
           data: {
             hari: dayNumber,
@@ -72,12 +72,10 @@ const state = {
         }
       )
       .then((res) => {
-        // console.log([...new Set(res.data.data)]);
         state.clinicLists.value = Object.values(res.data.data)
           .map((item) => item.nm_poli.replace("POLI", ""))
           .filter((value, index, self) => self.indexOf(value) == index);
 
-        // console.log(listPoli);
         return Object.values(res.data.data).forEach((dokter) => {
           if (dokter) {
             const detail = {
@@ -109,7 +107,7 @@ const state = {
     return SessionStorage.getItem("doctor");
   },
   getPoli: () => {
-    axios.post("http://127.0.0.1:3333/api/poli").then((res) => {
+    axios.post(process.env.API_ENDPOINT + "poli").then((res) => {
       res.data.data.filter((each) => {
         // console.log(each.nama_poli.includes(state.tempPoli.value));
       });

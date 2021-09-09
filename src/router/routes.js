@@ -22,6 +22,10 @@ const routes = [
         path: "/doctor/search",
         component: () => import("pages/SearchDoctorPage.vue"),
       },
+      {
+        path: "/user/login",
+        component: () => import("pages/form/LoginOrRegister.vue"),
+      },
     ],
   },
   {

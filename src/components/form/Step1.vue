@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="col-md-3"> -->
-    <div class="row no-wrap items-center">
+    <div class="row">
       <!-- Dokter -->
       <transition
         v-if="showCard"
@@ -43,7 +43,7 @@
           <card-doctor
             v-if="$route.params.id"
             :doctor="store.doctor.state.selected.name"
-            :specialist="store.doctor.state.selected.specialist"
+            :specialist="store.doctor.state.selected.specialist()"
             :time="store.doctor.state.selected.time"
           />
           <q-card-section
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { inject, ref, onMounted } from "vue";
+import { inject, ref, onMounted, onBeforeMount } from "vue";
 import CardDoctor from "../CardDoctor.vue";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
@@ -99,6 +99,13 @@ export default {
       ) {
         router.push("/registration");
       }
+    });
+
+    onBeforeMount(() => {
+      const selectedDoctor = store.doctor.state.detail.value.find(
+        (dokter) => dokter.id == store.doctor.state.doctorId()
+      );
+      store.doctor.state.selected = selectedDoctor;
     });
     return {
       store,
