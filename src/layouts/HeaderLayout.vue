@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div v-if="$route.path == '/'">
     <q-header
       style="background-color: rgb(229, 229, 229, 0.9)"
       class="text-grey-8"
       height-hint="64"
     >
       <q-toolbar class="GPL__toolbar" style="height: 64px">
+        <menu-button />
         <q-img
           src="logo.png"
           loading="lazy"
@@ -13,7 +14,7 @@
           height="50px"
           style="max-width: 50px"
         />
-        <router-link to="/" style="text-decoration:none">
+        <router-link to="/" style="text-decoration: none">
           <q-toolbar-title
             v-if="$q.screen.gt.sm"
             shrink
@@ -91,9 +92,10 @@
 <script>
 import { inject } from "vue";
 import RegButton from "src/components/button/RegButton.vue";
+import MenuButton from "src/components/button/menuButton.vue";
 
 export default {
-  components: { RegButton },
+  components: { RegButton, MenuButton },
 
   setup() {
     const store = inject("store");

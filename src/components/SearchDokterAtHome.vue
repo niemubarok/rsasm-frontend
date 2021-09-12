@@ -5,11 +5,11 @@
       <q-expansion-item
         class="shadow-1 overflow-hidden bg-primary"
         :class="!store.components.state.leftDrawerOpen ? 'z-top' : ''"
-        style="border-radius: 30px; width: 100%;margin-bottom:-4vh"
+        style="border-radius: 30px; width: 100%"
         :style="
-          $q.screen.lt.md && !store.components.state.searchBoxClicked
+          $q.screen.gt.sm && !store.components.state.searchBoxClicked
             ? 'width:100%;'
-            : ''
+            : 'margin-bottom:-2vh'
         "
         icon="people"
         label="Praktek Dokter Hari Ini"
@@ -50,6 +50,26 @@
                 <!-- <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" /> -->
               </template>
             </q-input>
+            Spesialis yang tersedia:
+            <template
+              v-for="(clinic, index) in store.doctor.state.clinicLists.value"
+              :key="index"
+            >
+              <!-- v-model="store.doctor.state.searchSpecialist.value" -->
+              <q-chip
+                :selected="store.doctor.state.searchSpecialist.value == clinic"
+                clickable
+                :removable="store.doctor.state.searchSpecialist.value == clinic"
+                @remove="store.doctor.state.searchSpecialist.value = ''"
+                dark
+                :class="{
+                  'bg-secondary text-grey-2':
+                    store.doctor.state.searchSpecialist.value == clinic,
+                }"
+                @click="store.doctor.state.searchSpecialist.value = clinic"
+                >{{ clinic }}</q-chip
+              >
+            </template>
           </q-card-section>
         </q-card>
       </q-expansion-item>

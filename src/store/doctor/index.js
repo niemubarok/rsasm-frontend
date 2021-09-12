@@ -106,13 +106,13 @@ const state = {
   getDoctorFromSessionStorage: () => {
     return SessionStorage.getItem("doctor");
   },
-  getPoli: () => {
-    axios.post(process.env.API_ENDPOINT + "poli").then((res) => {
-      res.data.data.filter((each) => {
-        // console.log(each.nama_poli.includes(state.tempPoli.value));
-      });
-    });
-  },
+  // getPoli: () => {
+  //   axios.post(process.env.API_ENDPOINT + "poli").then((res) => {
+  //     res.data.data.filter((each) => {
+  //       // console.log(each.nama_poli.includes(state.tempPoli.value));
+  //     });
+  //   });
+  // },
 };
 
 export default { state };

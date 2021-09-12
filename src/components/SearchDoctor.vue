@@ -44,45 +44,14 @@
           </q-date>
         </q-popup-proxy>
       </q-btn>
-      <q-chip
-        dense
-        rounded
-        color="grey-8"
-        style="z-index: 2"
-        class="q-ml-xs text-weight-light text-grey-1"
-        label="filter Spesialis :"
-        no-caps
+    </div>
+    <div class="transparent">
+      <q-chip dense :class="{ 'q-ml-xl': !$q.platform.is.mobile }"
+        >Spesialis tersedia :</q-chip
       >
-        <q-select
-          v-model="store.doctor.state.searchSpecialist.value"
-          :options="store.doctor.state.clinicLists.value"
-          dense
-          color="grey-1"
-          label-color="red"
-          class="q-pl-sm z-max text-white"
-          clearable
-          @clear="onClear"
-          behavior="menu"
-          input-class="text-white"
-          style="width: 200px"
-          dark
-        >
-          <!-- color="white" -->
-          <!-- <template #selected-item="scope">
-            <q-chip
-              removable
-              dense
-              :tabindex="store.doctor.state.clinicLists.value"
-              color="white"
-              text-color="secondary"
-              class="q-ma-none"
-              style="z-index: 2"
-              @remove="scope.removeAtIndex(scope.index)"
-            >
-            </q-chip>
-          </template> -->
-        </q-select>
-      </q-chip>
+    </div>
+    <div class="transparent" :class="{ 'q-ml-xl': !$q.platform.is.mobile }">
+      <chip-available-specialist />
     </div>
 
     <div>
@@ -127,9 +96,10 @@ import CarouselDoctor from "./CarouselDoctor.vue";
 import { ref, inject, onMounted, onBeforeUnmount } from "vue";
 import { date } from "quasar";
 import Navigation from "./button/Navigation.vue";
+import ChipAvailableSpecialist from "./chipAvailableSpecialist.vue";
 
 export default {
-  components: { CarouselDoctor, Navigation },
+  components: { CarouselDoctor, Navigation, ChipAvailableSpecialist },
   setup() {
     const style = () => {
       // if (store.components.state.searchBoxClicked) {
@@ -193,7 +163,7 @@ export default {
       isToday.value = true;
       store.doctor.state.getDataDokter();
       // console.log(store.doctor.state.clinicLists);
-      store.doctor.state.getPoli();
+      // store.doctor.state.getPoli();
     });
     // onBeforeUnmount(() => {
     //   const selectedDoctor = store.doctor.state.detail.value.find(

@@ -5,19 +5,7 @@
   >
     <q-separator />
     <q-toolbar class="GPL__toolbar" style="height: 64px">
-      <q-btn
-        v-if="$q.screen.lt.lg"
-        flat
-        dense
-        round
-        aria-label="Menu"
-        icon="menu"
-        class="q-mx-md"
-        @click="
-          store.components.state.leftDrawerOpen =
-            !store.components.state.leftDrawerOpen
-        "
-      />
+     
 
       <q-img
         src="logo.png"
