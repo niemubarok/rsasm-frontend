@@ -20,15 +20,6 @@
         @show="atShow"
         @hide="atHide"
       >
-        <!-- <q-scroll-observer @scroll="showScrollGuide = true" /> -->
-        <!-- <template v-slot:header>
-        
-        <div class="text-subtitle2">
-          <q-icon size="40px" name="people" color="grey-8"/>
-          Praktek Dokter Hari Ini
-          <q-space />
-          </div>
-      </template> -->
         <q-card>
           <q-card-section>
             <!-- search -->
@@ -47,7 +38,6 @@
                   v-if="store.doctor.state.searchText.value === ''"
                   name="search"
                 />
-                <!-- <q-icon v-else name="clear" class="cursor-pointer" @click="search = ''" /> -->
               </template>
             </q-input>
             Spesialis yang tersedia:
@@ -55,7 +45,6 @@
               v-for="(clinic, index) in store.doctor.state.clinicLists.value"
               :key="index"
             >
-              <!-- v-model="store.doctor.state.searchSpecialist.value" -->
               <q-chip
                 :selected="store.doctor.state.searchSpecialist.value == clinic"
                 clickable

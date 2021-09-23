@@ -3,6 +3,7 @@ import { date } from "quasar";
 
 const data = reactive({
   detail: {
+    noRM: "",
     nik: "",
     noBPJS: "-",
     name: "",
@@ -38,7 +39,7 @@ const data = reactive({
     nip: "-",
     kd_prop: "1",
     propinsipj: "-",
-    isPasienBaru: false,
+    isPasienBaru: true,
     tgl_daftar: null,
     tgl_periksa: "",
   },

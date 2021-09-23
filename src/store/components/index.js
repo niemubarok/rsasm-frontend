@@ -1,7 +1,4 @@
-import { reactive, computed, inject } from "vue";
-import { date } from "quasar";
-
-const store = inject("store");
+import { reactive } from "vue";
 
 const state = reactive({
   leftDrawerOpen: false,

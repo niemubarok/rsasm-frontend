@@ -4,16 +4,13 @@
     enter-active-class="animated fadeInDown"
     leave-active-class="animated fadeOut"
   >
-    <div v-if="$route.params.id" v-show="showNext" class="col-md-8 q-ml-sm">
+    <div class="col-md-8 q-ml-sm">
       <q-card
+        v-if="$route.params.id"
         class="transparent q-mt-sm q-pa-sm no-shadow flat"
-        style="border-radius: 30px; border-left: 1px solid grey"
+        style="border-radius: 30px"
+        :style="$q.screen.gt.sm ? 'border-left: 1px solid grey' : ''"
       >
-        <!-- :style="
-          $q.screen.gt.md 
-            ? 'width:500px;margin-left:100px;'
-            : 'width:90vw;'
-        " -->
         <!-- chip -->
         <div style="margin-bottom: -15px">
           <q-chip color="secondary" text-color="white">
@@ -24,29 +21,56 @@
           </q-chip>
         </div>
 
-        <!-- BASIC DATA -->
+        <!-- FORM -->
         <div class="row no-wrap items-center">
           <q-card
             flat
-            class="transparent bg-grey-3 full-width q-pa-sm q-pb-md q-mt-md"
+            style="border-radius: 30px"
+            class="bg-grey-3 q-pa-sm q-pb-md q-mt-md"
           >
             <q-form @submit="onClickBtnCheckPatientData">
               <div>
-                <q-expansion-item
-                  v-model="expanded"
-                  :style="!expanded ? 'margin-top: -10px' : 'margin-top: -50px'"
-                  :icon="!expanded ? 'person' : ''"
-                  :label="!expanded ? 'Detail' : ''"
-                  expand-icon-toggle
+                <!-- BASIC DATA PASIEN MUNCUL JIKA PASIEN ADALAH PASIEN BARU -->
+                <q-card
+                  v-if="hideBasicForm"
+                  style="border-radius: 20px"
+                  class="q-pa-md bg-grey-3"
                 >
+                  <div>
+                    <q-badge
+                      no-caps
+                      class="no-shadow text-grey-9"
+                      color="grey-"
+                      rounded
+                      floating
+                      size="xs"
+                      @click="editBasicData"
+                      >edit <q-icon name="edit"
+                    /></q-badge>
+                  </div>
+                  <table>
+                    <template v-for="data in tableBasicData" :key="data.value">
+                      <tr>
+                        <td>
+                          <q-chip style="width: 100%">
+                            {{ data.head }}
+                          </q-chip>
+                        </td>
+                        <td class="q-px-sm">:</td>
+                        <td>{{ data.value }}</td>
+                      </tr>
+                    </template>
+                  </table>
+                </q-card>
+
+                <!-- FORM BASIC DATA -->
+                <div v-if="!hideBasicForm">
                   <!-- NIK -->
                   <q-input
                     dense
-                    ref="inputNik"
                     v-model="store.patient.detail.nik"
                     mask="################"
                     :rules="formRules.nik"
-                    clearable
                     class="q-mt-sm"
                     label="NIK / No. KTP"
                     flat
@@ -54,9 +78,9 @@
 
                   <!-- NAMA LENGKAP  -->
                   <q-input
+                    ref="inputNik"
                     dense
                     v-model="store.patient.detail.name"
-                    clearable
                     class="q-mt-sm"
                     flat
                     label="Nama Lengkap Pasien"
@@ -70,7 +94,6 @@
                     class="q-mt-sm"
                     v-model="store.patient.detail.birthDate"
                     :rules="formRules.tglLahir"
-                    clearable
                     :hint="
                       $q.platform.is.desktop
                         ? 'Tanggal Lahir (contoh: 20/09/1992)'
@@ -80,14 +103,12 @@
                     :label="!$q.platform.is.desktop ? 'Tanggal Lahir' : ''"
                     type="date"
                   >
-                    <!-- type="date" -->
                   </q-input>
 
                   <!-- WHATSAPP -->
                   <q-input
                     dense
                     v-model="store.patient.detail.phone"
-                    clearable
                     mask="####-####-####"
                     unmasked-value
                     class="q-mt-sm"
@@ -123,20 +144,20 @@
                       >
                       </q-radio>
                     </div>
-
-                    <!-- JIKA PASIEN PILIH BPJS, MUNCULKAN KOLOM NOMOR KARTU BPJS -->
-                    <div>
-                      <q-input
-                        dense
-                        v-if="store.patient.detail.jnsBayar == 'BPJS'"
-                        v-model="store.patient.detail.noBPJS"
-                        label="Nomor Kartu BPJS"
-                        mask="######################"
-                        :lazy-rules="formRules.jnsBayar"
-                      ></q-input>
-                    </div>
                   </div>
-                </q-expansion-item>
+                  <!-- JIKA PASIEN PILIH BPJS, MUNCULKAN KOLOM NOMOR KARTU BPJS -->
+                  <div>
+                    <q-input
+                      dense
+                      v-if="store.patient.detail.jnsBayar == 'BPJS'"
+                      v-model="store.patient.detail.noBPJS"
+                      label="Nomor Kartu BPJS"
+                      mask="######################"
+                      :lazy-rules="formRules.jnsBayar"
+                    ></q-input>
+                  </div>
+                </div>
+
                 <!-- TOMBOL CEK APAKAH PASIEN SUDAH PERNAH BEROBAT ATAU BELUM -->
                 <q-btn
                   v-morph:btn:group:300.resize="morphBtnCheck"
@@ -144,14 +165,12 @@
                   rounded
                   :class="btnCheckClass"
                   label="Selanjutnya"
-                  :style="btnCheckStyle"
                   type="submit"
                   :disable="
                     store.patient.detail.nik == '' ||
                     store.patient.detail.name == ''
                   "
                 >
-                  <!-- @click="onClickBtnCheckPatientData" -->
                   <q-spinner-cube
                     v-if="isSearching"
                     color="secondary"
@@ -163,22 +182,13 @@
                 <!-- MORPH KETIKA PASIEN ADALAH PASIEN BARU -->
                 <q-card
                   ref="cardFormPasienBaru"
-                  style="boder-radius: 30px"
+                  style="boder-radius: 30px; width: 95%"
                   class="transparent"
                   flat
-                  v-morph:cardPasienBaru:group:500.resize="morphBtnCheck"
+                  v-morph:cardPasienBaru:group:300.tween="morphBtnCheck"
                 >
-                  <q-card-section>
-                    <q-badge
-                      class="bg-red-3 text-grey-8"
-                      style="margin-left: -20px"
-                    >
-                      Hmm.. Sepertinya sobat Sibroh belum terdaftar di sistem
-                      kami
-                    </q-badge>
-                  </q-card-section>
-                  <div>
-                    <q-chip class="bg-primary"
+                  <div class="q-mt-md">
+                    <q-chip class="bg-red-5 text-grey-2"
                       >Yuk! Lengkapi Data Pasien dulu (hanya sekali)</q-chip
                     >
                   </div>
@@ -187,65 +197,44 @@
                   </q-card-section>
                 </q-card>
 
-                <!-- MORPH KETIKA PASIEN ADALAH PASIEN LAMA -->
-                <q-card v-morph:cardPasienLama:group:500.resize="morphBtnCheck">
+                <!-- MORPH JIKA TERJADI ERROR DI BACKEND -->
+                <q-card v-morph:cardError:group:500.tween="morphBtnCheck">
                   <q-card-section>
-                    Terimakasih selalu mempercayakan kesehatan keluarga anda di
-                    RS Ali Sibroh Malisi
+                    Mohon maaf sepertinya terjadi masalah, Silahkan Hubungi
+                    nomor customer service kami 085524914191
                   </q-card-section>
                 </q-card>
               </div>
             </q-form>
           </q-card>
         </div>
-
-        <!-- FORM PASIEN BARU -->
-        <!-- <new-patient-form /> -->
       </q-card>
 
       <dialog-confirm />
-      <!-- {{store.patient.detail.tgl_periksa}}
-      {{store.doctor.state.searchDate.value}} -->
     </div>
   </transition>
 </template>
 
 <script>
-import { ref, inject, onMounted } from "vue";
-// import OldPatientForm from "../form/OldPatientForm.vue";
+import { ref, inject, onMounted, computed } from "vue";
 import NewPatientForm from "../form/NewPatientForm.vue";
 import DialogConfirm from "../form/DialogConfirm.vue";
 import axios from "axios";
-import { date } from "quasar";
+import { date, Notify } from "quasar";
 
 export default {
-  // name: 'ComponentName',
   components: {
-    // OldPatientForm,
     NewPatientForm,
     DialogConfirm,
   },
   setup() {
     const morphBtnCheck = ref("btn");
-    const expanded = ref(true);
-
-    const showCard = ref(false);
-    setTimeout(() => {
-      showCard.value = true;
-    }, 100);
-    const showNext = ref(false);
-    setTimeout(() => {
-      showNext.value = true;
-    }, 500);
-    const test = () => {
-      console.log("test");
-    };
-
+    const store = inject("store");
+    const hideBasicForm = ref(false);
     const isSearching = ref(false);
     const btnCheckLabel = ref("Cek Data Pasien");
     const btnCheckClass = ref("");
     const btnCheckStyle = ref("");
-    const store = inject("store");
     const formRules = {
       nik: [
         (val) => !!val || "Mohon masukan NIK",
@@ -270,6 +259,34 @@ export default {
       ],
     };
 
+    const tableBasicData = computed(() => {
+      return [
+        {
+          head: "NIK",
+          value: store.patient.detail.nik,
+        },
+        {
+          head: "Nama",
+          value: store.patient.detail.name,
+        },
+        {
+          head: "Tgl. Lahir",
+          value: store.patient.detail.birthDate,
+        },
+        {
+          head: "No. Whatsapp",
+          value: store.patient.detail.phone,
+        },
+        {
+          head: "Jns. Bayar",
+          value: store.patient.detail.jnsBayar,
+        },
+      ];
+    });
+
+    const editBasicData = () => {
+      hideBasicForm.value = !hideBasicForm.value;
+    };
     const disableBtnCheckPatientData = () => {
       return (
         store.patient.detail.nik == "" ||
@@ -279,8 +296,6 @@ export default {
     };
 
     const onClickBtnCheckPatientData = () => {
-      // console.log(store.patient.detail.birthDate);
-
       if (
         store.patient.detail.nik != "" &&
         store.patient.detail.name != "" &&
@@ -290,30 +305,41 @@ export default {
 
         axios
           .post(
-            "http://192.168.7.250:3333/api/pasien",
+            process.env.API_ENDPOINT + "pasien",
             {
-              noKtp: store.patient.detail.nik,
-              namaPasien: store.patient.detail.name,
-              tglLahir: store.patient.detail.birthDate,
+              data: {
+                noKtp: store.patient.detail.nik,
+                namaPasien: store.patient.detail.name,
+                tglLahir: store.patient.detail.birthDate,
+              },
             },
             {
               headers: { "Access-Control-Allow-Origin": "*" },
             }
           )
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             if (res.status == 200) {
-              if (!res.data.isPasienBaru) {
+              if (res.data.data !== null) {
                 isSearching.value = false;
-                store.patient.detail.name = res.data.data.nama_pasien;
-                store.patient.detail.isPasienBaru = false
+                store.patient.detail.isPasienBaru = false;
+                store.patient.detail.noRM = res.data.data.pasien.no_rm;
                 store.components.state.dialogConfirm = true;
               } else {
                 isSearching.value = false;
+
+                Notify.create({
+                  message:
+                    "Hmm.. Sepertinya sobat Sibroh belum terdaftar di sistem kami",
+                  color: "red",
+                  closeBtn: true,
+                  position: "top-right",
+                });
                 morphBtnCheck.value = "cardPasienBaru";
-                expanded.value = false;
+                hideBasicForm.value = true;
               }
             } else {
+              morphBtnCheck.value = "cardError";
               console.log("error");
             }
           });
@@ -331,47 +357,20 @@ export default {
         "YYYY-MM-DD"
       );
     });
-
-    // const showFormPasienLama = () => {
-    //   store.components.state.formEditing = true;
-    //   store.components.state.isOldPatient = true;
-    // };
-
-    // const hideFormPasienLama = () => {
-    //   store.components.state.formEditing = false;
-    //   store.components.state.isOldPatient = false;
-    // };
-
-    // const showFormPasienBaru = () => {
-    //   store.components.state.isNewPatient = true;
-    //   store.components.state.formEditing = true;
-    // };
-
-    // const hideFormPasienBaru = () => {
-    //   store.components.state.isNewPatient = false;
-    //   store.components.state.formEditing = false;
-    // };
-
-    // const store = inject("store");
     return {
       store,
-      showCard,
-      expanded,
-      showNext,
       formRules,
       isSearching,
       btnCheckClass,
       btnCheckLabel,
       btnCheckStyle,
       morphBtnCheck,
-      test,
       onSubmit,
       onClickBtnCheckPatientData,
       disableBtnCheckPatientData,
-      // showFormPasienLama,
-      // hideFormPasienLama,
-      // showFormPasienBaru,
-      // hideFormPasienBaru,
+      tableBasicData,
+      hideBasicForm,
+      editBasicData,
     };
   },
 };

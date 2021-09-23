@@ -5,7 +5,7 @@
     leave-active-class="animated fadeOut"
   >
     <q-form @submit="onSubmit">
-      <div>
+      <div style="margin-left: -20px;margin-top:-20px;">
         <!-- jk -->
         <q-chip
           ><q-badge
@@ -42,6 +42,7 @@
           <q-option-group
             v-model="store.patient.detail.gol_darah"
             :options="options.golonganDarah"
+            size="20px"
             inline
           />
         </q-chip>
@@ -131,20 +132,18 @@
         </q-chip>
         <!-- </div> -->
       </div>
-      <span style="width: 200px">
+      <span>
         <q-btn
           ref="btnKonfirmasi"
           type="submit"
-          :label="disableBtnKonfirmasi() ? 'Data Belum Lengkap':'Konfirmasi'"
-          :color="disableBtnKonfirmasi()? 'grey-5':'secondary'"
-          :class="disableBtnKonfirmasi() ? 'text-grey-9':''"
+          :label="disableBtnKonfirmasi() ? 'Data Belum Lengkap' : 'Konfirmasi'"
+          :color="disableBtnKonfirmasi() ? 'grey-5' : 'secondary'"
+          :class="disableBtnKonfirmasi() ? 'text-grey-9' : ''"
           rounded
           :disable="disableBtnKonfirmasi()"
         >
         </q-btn>
-        <q-tooltip
-          v-if="disableBtnKonfirmasi()"
-          class="bg-red"
+        <q-tooltip v-if="disableBtnKonfirmasi()" class="bg-red"
           >Upps.. masih ada data yang belum lengkap
         </q-tooltip>
       </span>
@@ -206,16 +205,16 @@ export default {
 
     const disableBtnKonfirmasi = () => {
       if (
-            store.patient.detail.jk == '' ||
-            store.patient.detail.tmp_lahir == '' ||
-            store.patient.detail.nm_ibu == '' ||
-            store.patient.detail.alamat == '' ||
-            store.patient.detail.gol_darah == '' ||
-            store.patient.detail.pekerjaan == '' ||
-            store.patient.detail.stts_nikah == '' ||
-            store.patient.detail.agama == '' ||
-            store.patient.detail.keluarga == '' ||
-            store.patient.detail.namakeluarga == ''
+        store.patient.detail.jk == "" ||
+        store.patient.detail.tmp_lahir == "" ||
+        store.patient.detail.nm_ibu == "" ||
+        store.patient.detail.alamat == "" ||
+        store.patient.detail.gol_darah == "" ||
+        store.patient.detail.pekerjaan == "" ||
+        store.patient.detail.stts_nikah == "" ||
+        store.patient.detail.agama == "" ||
+        store.patient.detail.keluarga == "" ||
+        store.patient.detail.namakeluarga == ""
       ) {
         return true;
       }

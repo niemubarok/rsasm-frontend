@@ -1,7 +1,7 @@
 // import router from 'src/router'
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
-import { date, SessionStorage } from "quasar";
+import { SessionStorage } from "quasar";
 import axios from "axios";
 
 const state = {
@@ -12,6 +12,7 @@ const state = {
   searchDate: ref(""),
   isFiltered: ref(false),
   tempPoli: ref([]),
+  kodePoli: ref(""),
 
   filterDokter: () => {
     if (Object.keys(state.getDoctorFromSessionStorage).length != 0) {
@@ -57,7 +58,6 @@ const state = {
     const dayNumber = new Date(state.searchDate.value).getDay();
 
     state.detail.value = [];
-    // state.clinicLists.value = [];
 
     axios
       .post(
@@ -78,9 +78,11 @@ const state = {
 
         return Object.values(res.data.data).forEach((dokter) => {
           if (dokter) {
+            // console.log(dokter);
             const detail = {
               id: dokter.kd_dokter,
               name: dokter.nm_dokter,
+              kd_poli: dokter.kd_poli,
               specialist: () => {
                 return dokter.nm_poli.replace("POLI", "");
               },
@@ -95,16 +97,15 @@ const state = {
               dokter.nm_poli.replace("POLI", "SPESIALIS")
             );
             state.detail.value.push(detail);
-            SessionStorage.set("doctor", detail);
+            // SessionStorage.set("doctor", detail);
           } else {
             state.detail.value.push(null);
           }
-          // console.log(SessionStorage.getItem('doctor'));
         });
       });
   },
   getDoctorFromSessionStorage: () => {
-    return SessionStorage.getItem("doctor");
+    // return SessionStorage.getItem("doctor");
   },
   // getPoli: () => {
   //   axios.post(process.env.API_ENDPOINT + "poli").then((res) => {

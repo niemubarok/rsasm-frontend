@@ -87,6 +87,7 @@
 import { useQuasar, date } from "quasar";
 import { inject, reactive, ref, onBeforeMount } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -94,6 +95,7 @@ export default {
 
     const store = inject("store");
     const TglLahir = ref("");
+    const $router = useRouter();
 
     // const confirmPatientData = reactive({
     //   NIK: store.patient.detail.nik,
@@ -117,28 +119,34 @@ export default {
           message: "You need to accept the license and terms first",
         });
       } else {
-        axios
-          .post(process.env.API_ENDPOINT + "pasien/store", {
-            data: {
-              pasien: store.patient.detail,
-            },
-          })
-          .then((res) => {
-            if (res.status == 201) {
-              //JIKA BERHASIL MASUK DATABASE
+        if (!store.patient.detail.isPasienBaru) {
+          axios
+            .post(process.env.API_ENDPOINT + "pendaftaran/pasien-lama", {
+              data: {
+                pasien: store.patient.detail,
+                tgl_periksa: store.patient.detail.tgl_periksa,
+                kodeDokter: store.doctor.state.selected.id,
+                kodePoli: store.doctor.state.selected.kd_poli,
+              },
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.status == 201) {
+                //JIKA BERHASIL MASUK DATABASE
 
-              //TAMPILKAN NOTIFIKASI
-              $q.notify({
-                color: "green-4",
-                textColor: "white",
-                icon: "cloud_done",
-                message: "Submitted",
-              });
+                //TAMPILKAN NOTIFIKASI
+                $q.notify({
+                  color: "green-4",
+                  textColor: "white",
+                  icon: "cloud_done",
+                  message: "Submitted",
+                });
 
-              //REDIRECT KE HALAMAN REGISTERED DENGAN DATA DARI BACKEND
-              $router.push("/registration/registered");
-            }
-          });
+                //REDIRECT KE HALAMAN REGISTERED DENGAN DATA DARI BACKEND
+                $router.push("/registration/registered");
+              }
+            });
+        }
       }
     };
 

@@ -50,7 +50,7 @@
                 Kami telah mengirimkan detail pendaftaran anda via WHATSAPP
                 <br />
                 di no
-                {{ store.patient.oldPatientForm.phone }}
+                <!-- {{ store.patient.oldPatientForm.phone }} -->
                 <!-- </div> -->
               </q-card-section>
               <!-- <q-card-section class="row items-center">
