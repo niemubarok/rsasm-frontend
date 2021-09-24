@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import { date } from "quasar";
+import axios from "axios";
 
 const data = reactive({
   detail: {
@@ -22,7 +23,7 @@ const data = reactive({
     pnd: "-", //'TS', 'TK', 'SD', 'SMP', 'SMA', 'SLTA/SEDERAJ'.''
     keluarga: "", //enum('AYAH', 'IBU', 'ISTRI', 'SUAMI', 'SAUDARA'
     namakeluarga: "",
-    kd_pj: "-",
+    kd_pj: '-',
     kd_kel: "80545",
     kd_kec: "1",
     kd_kab: "1",
@@ -39,7 +40,7 @@ const data = reactive({
     nip: "-",
     kd_prop: "1",
     propinsipj: "-",
-    isPasienBaru: true,
+    isPasienBaru: false,
     tgl_daftar: null,
     tgl_periksa: "",
   },
@@ -48,6 +49,13 @@ const data = reactive({
   },
   formattedTglPeriksa: () => {
     return date.formatDate(new Date(data.detail.tgl_periksa), "DD MMMM YYYY");
+  },
+  storePasienLama: () => {},
+  storePasienBaru: () => {
+    axios.post(
+      process.env.API_ENDPOINT + "pendaftaran/pasien-baru",
+      data.detail
+    );
   },
 });
 

@@ -42,9 +42,9 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: "hash", // available values: 'hash', 'history'
+      vueRouterMode: "history", // available values: 'hash', 'history'
       distDir: ctx.mode.spa ? "public" : null,
-      env: require('dotenv').config().parsed,
+      env: require("dotenv").config().parsed,
 
       // transpile: false,
 
@@ -111,7 +111,7 @@ module.exports = configure(function (ctx) {
 
     // https://v2.quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
-      pwa: false,
+      pwa: true,
 
       // manualStoreHydration: true,
       // manualPostHydrationTrigger: true,
@@ -150,7 +150,7 @@ module.exports = configure(function (ctx) {
       manifest: {
         name: `rsasm`,
         short_name: `rsasm`,
-        description: `A Quasar Framework app`,
+        description: `Website RS Ali Sibroh Malisi`,
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",

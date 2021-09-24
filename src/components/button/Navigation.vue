@@ -2,7 +2,7 @@
   <!-- :ripple="false" -->
 
   <menu-button />
-  <router-link to="/" style="text-decoration: none">
+  <a href="/" style="text-decoration: none">
     <q-btn
       style="z-index: 2"
       flat
@@ -11,7 +11,7 @@
       color="grey-9"
       @click="onClickHomeBtn"
     />
-  </router-link>
+  </a>
   <!-- $router.push('/'), -->
   <!-- log -->
   <!-- 

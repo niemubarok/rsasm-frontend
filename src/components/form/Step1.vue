@@ -14,7 +14,11 @@
         style="border-radius: 30px"
         :style="$q.screen.gt.sm ? '' : 'border-right: 1px solid grey'"
       >
-        <q-expansion-item v-model="expanded" style="width: 100%">
+        <q-expansion-item
+          v-model="expanded"
+          style="width: 100%"
+          expand-icon-toggle
+        >
           <template v-slot:header>
             <div class="row no-wrap">
               <q-chip color="secondary" text-color="white">
@@ -106,7 +110,7 @@ export default {
       ) {
         router.push("/registration");
       }
-      if ($q.screen.lt.md) {
+      if ($q.platform.is.mobile) {
         setTimeout(() => {
           expanded.value = false;
         }, 1000);
@@ -119,7 +123,9 @@ export default {
       );
       // console.log(selectedDoctor.kd_poli);
       store.doctor.state.selected = selectedDoctor;
-      store.doctor.state.kodePoli = selectedDoctor.kodePoli;
+      store.doctor.state.kodePoli = selectedDoctor?.kodePoli
+        ? selectedDoctor.kodePoli
+        : null;
     });
     return {
       store,

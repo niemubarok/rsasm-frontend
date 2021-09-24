@@ -112,41 +112,44 @@ export default {
 
     const onSubmit = () => {
       if (accept.value !== true) {
-        $q.notify({
-          color: "red-5",
-          textColor: "white",
-          icon: "warning",
-          message: "You need to accept the license and terms first",
-        });
+        // $q.notify({
+        //   color: "red-5",
+        //   textColor: "white",
+        //   icon: "warning",
+        //   message: "You need to accept the license and terms first",
+        // });
       } else {
-        if (!store.patient.detail.isPasienBaru) {
-          axios
-            .post(process.env.API_ENDPOINT + "pendaftaran/pasien-lama", {
-              data: {
-                pasien: store.patient.detail,
-                tgl_periksa: store.patient.detail.tgl_periksa,
-                kodeDokter: store.doctor.state.selected.id,
-                kodePoli: store.doctor.state.selected.kd_poli,
-              },
-            })
-            .then((res) => {
-              console.log(res);
-              if (res.status == 201) {
-                //JIKA BERHASIL MASUK DATABASE
+        // if (!store.patient.detail.isPasienBaru) {
+        axios
+          .post(process.env.API_ENDPOINT + "pendaftaran", {
+            data: {
+              pasien: store.patient.detail,
+              dokter: store.doctor.state.selected,
+              tglPeriksa: store.patient.detail.tgl_periksa,
+              kodeDokter: store.doctor.state.selected.id,
+              namaDokter: store.doctor.state.selected.name,
+              kodePoli: store.doctor.state.selected.kd_poli,
+              namaPoli: store.doctor.state.selected.specialist(),
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 201) {
+              //JIKA BERHASIL MASUK DATABASE
 
-                //TAMPILKAN NOTIFIKASI
-                $q.notify({
-                  color: "green-4",
-                  textColor: "white",
-                  icon: "cloud_done",
-                  message: "Submitted",
-                });
+              //TAMPILKAN NOTIFIKASI
+              $q.notify({
+                color: "green-4",
+                textColor: "white",
+                icon: "cloud_done",
+                message: "Submitted",
+              });
 
-                //REDIRECT KE HALAMAN REGISTERED DENGAN DATA DARI BACKEND
-                $router.push("/registration/registered");
-              }
-            });
-        }
+              //REDIRECT KE HALAMAN REGISTERED DENGAN DATA DARI BACKEND
+              $router.push("/registration/registered");
+            }
+          });
+        // }
       }
     };
 

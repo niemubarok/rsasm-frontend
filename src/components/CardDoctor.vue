@@ -14,9 +14,7 @@ vue/require-prop-types */
     "
     :style="$q.screen.gt.xs ? 'width:300px;' : ''"
   >
-    <q-card-section
-      horizontal
-    >
+    <q-card-section horizontal>
       <q-card-section style="margin-left: 10%; margin-top: -10%">
         <!-- <div class="row "> -->
         <q-avatar size="80px" class="shadow-4">
@@ -101,7 +99,6 @@ export default {
   setup() {
     const store = inject("store");
     const daftar = () => {
-      console.log("button clicked");
       return [
         (store.doctor.state.searchText.value = ""),
         (store.components.searchBoxClicked = false),

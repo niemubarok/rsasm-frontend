@@ -4,26 +4,34 @@
     enter-active-class="animated fadeInDown"
     leave-active-class="animated fadeOutUp"
   >
-    <q-splitter  v-model="splitterModel" horizontal style="height: 100vh" :limits="[10,80]" reverse separator-class="bg-white" :after-class="{'overflow-hidden bg-white':$q.platform.is.mobile}" >
-      <template  #before>
-          <!-- v-if="$q.platform.is.mobile" -->
-        <q-img
-          class="full-width "
-          :ratio="4/4"
-          src="~assets/img/Ok.gif"
+    <q-splitter
+      v-model="splitterModel"
+      horizontal
+      style="height: 100vh"
+      :limits="[10, 80]"
+      reverse
+      separator-class="bg-white"
+      :after-class="{ 'overflow-hidden bg-white': $q.platform.is.mobile }"
+    >
+      <template #before>
+        <!-- v-if="$q.platform.is.mobile" -->
+        <q-img class="full-width" :ratio="4 / 4" src="~assets/img/Ok.gif" />
+      </template>
+
+      <template #separator>
+        <q-avatar
+          v-if="$q.platform.is.mobile"
+          class="transparent"
+          text-color="primary"
+          size="60px"
+          icon="drag_handle"
         />
       </template>
 
-        <template #separator>
-        <q-avatar  v-if="$q.platform.is.mobile" class="transparent" text-color="primary" size="60px" icon="drag_handle" />
-      </template>
-
       <template #after>
-        <div 
-         style="border-radius:30px"
-        class="row justify-center q-mx-sm">
+        <div style="border-radius: 30px" class="row justify-center q-mx-sm">
           <q-card
-            class="bg-green-2 q-mx-md "
+            class="bg-green-2 q-mx-md"
             :class="$q.screen.gt.sm ? ' q-mt-xl' : 'full-width q-mx-sm'"
             style="border-radius: 30px; width: 60vw; background-color: #609c71"
           >
@@ -47,9 +55,11 @@
                   Anda Berhasil Mendaftar
                 </q-chip>
                 <!-- <div> -->
-                Kami telah mengirimkan detail pendaftaran anda via WHATSAPP
-                <br />
-                di no
+                <h6>
+                  Kami telah mengirimkan detail pendaftaran anda via WHATSAPP
+                  <br />
+                  di no {{ store.patient.detail.phone }}
+                </h6>
                 <!-- {{ store.patient.oldPatientForm.phone }} -->
                 <!-- </div> -->
               </q-card-section>

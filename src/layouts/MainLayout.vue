@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr fFf" class="bg-grey-3">
-    <header-layout  />
+    <header-layout />
     <!-- <footer-layout
       v-if="$q.screen.lt.md && !store.components.state.searchBoxClicked"
     /> -->
@@ -9,9 +9,9 @@
       v-model="store.components.state.leftDrawerOpen"
       behavior="mobile"
       bordered
-      width="120px"
-      class="z-max "
+      class="z-max"
     >
+      <!-- :width="Number(120) + 'px'" -->
       <!-- mini="true" -->
       <!-- style="width:120px;" -->
       <!-- :width="50+'px'" -->

@@ -286,6 +286,7 @@ export default {
 
     const editBasicData = () => {
       hideBasicForm.value = !hideBasicForm.value;
+      morphBtnCheck.value = "btn";
     };
     const disableBtnCheckPatientData = () => {
       return (
@@ -318,14 +319,15 @@ export default {
             }
           )
           .then((res) => {
-            // console.log(res);
+            console.log(res.data.data);
             if (res.status == 200) {
               if (res.data.data !== null) {
                 isSearching.value = false;
-                store.patient.detail.isPasienBaru = false;
                 store.patient.detail.noRM = res.data.data.pasien.no_rm;
+                store.patient.detail.name = res.data.data.pasien.nama_pasien;
                 store.components.state.dialogConfirm = true;
               } else {
+                store.patient.detail.isPasienBaru = true;
                 isSearching.value = false;
 
                 Notify.create({
