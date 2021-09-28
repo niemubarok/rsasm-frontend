@@ -11,14 +11,14 @@
     transition-prev="slide-right"
     transition-next="slide-left"
     :class="
-      $q.screen.gt.md ? 'q-ml-lg  rounded-borders q-mt-sm' : 'shadow-2 roundedCard'
+      $q.screen.gt.md
+        ? 'q-ml-lg  rounded-borders'
+        : 'shadow-2 roundedCard q-mx-sm'
     "
-    :style="
-      $q.screen.lt.md
-        ? 'height:250px;width:100vw;border-bottom-left-radius:10px;border-bottom-right-radius:10px;'
-        : 'height:300px'
-    "
-    @mouseenter="autoplay = false"
+    class="q-mt-md"
+    style="border-radius: 30px"
+    :style="$q.screen.lt.md ? 'height: 200px;' : ''"
+    @mouseenter="autoplay = true"
     @mouseleave="autoplay = true"
   >
     <!-- class="rounded-borders q-mt-sm" -->

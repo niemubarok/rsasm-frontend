@@ -98,9 +98,22 @@
 import { inject, ref } from "vue";
 export default {
   setup() {
+     const store= inject("store")
+
+    const download = () => {
+      const link = store.patient.qrcode;
+      const downloadLink = document.createElement("a");
+      const fileName = store.patient.detail.name;
+      downloadLink.href = link;
+      downloadLink.download = fileName;
+      downloadLink.click();
+    };
+
     return {
       splitterModel: ref(70),
-      store: inject("store"),
+      store,
+      download
+
     };
   },
 };

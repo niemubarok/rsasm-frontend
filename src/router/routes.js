@@ -9,8 +9,12 @@ const routes = [
         component: () => import("pages/form/RegistrationPage.vue"),
       },
       {
-        path: "/registration/registered",
+        path: "/registration/success",
         component: () => import("pages/form/Registered.vue"),
+      },
+      {
+        path: "/registration/detail",
+        component: () => import("pages/form/RegistrationDetail.vue"),
       },
       {
         path: "/registration/:id",

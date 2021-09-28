@@ -96,13 +96,6 @@ export default {
     const store = inject("store");
     const TglLahir = ref("");
     const $router = useRouter();
-
-    // const confirmPatientData = reactive({
-    //   NIK: store.patient.detail.nik,
-    //   Nama: store.patient.detail.name,
-    //   "Tgl. Lahir": store.patient.detail.birthDate,
-    //   "No. HP": store.patient.detail.phone,
-    // });
     const accept = ref(false);
 
     const onclosePopUp = () => {
@@ -111,46 +104,81 @@ export default {
     };
 
     const onSubmit = () => {
-      if (accept.value !== true) {
-        // $q.notify({
-        //   color: "red-5",
-        //   textColor: "white",
-        //   icon: "warning",
-        //   message: "You need to accept the license and terms first",
-        // });
-      } else {
-        // if (!store.patient.detail.isPasienBaru) {
-        axios
-          .post(process.env.API_ENDPOINT + "pendaftaran", {
-            data: {
-              pasien: store.patient.detail,
-              dokter: store.doctor.state.selected,
-              tglPeriksa: store.patient.detail.tgl_periksa,
-              kodeDokter: store.doctor.state.selected.id,
-              namaDokter: store.doctor.state.selected.name,
-              kodePoli: store.doctor.state.selected.kd_poli,
-              namaPoli: store.doctor.state.selected.specialist(),
-            },
-          })
-          .then((res) => {
-            console.log(res);
-            if (res.status == 201) {
-              //JIKA BERHASIL MASUK DATABASE
+      // if (accept.value !== true) {
+      // $q.notify({
+      //   color: "red-5",
+      //   textColor: "white",
+      //   icon: "warning",
+      //   message: "You need to accept the license and terms first",
+      // });
+      // } else {
+      // if (!store.patient.detail.isPasienBaru) {
+      axios
+        .post(process.env.API_ENDPOINT + "pendaftaran", {
+          data: {
+            pasien: store.patient.detail,
+            dokter: store.doctor.state.selected,
+            tglPeriksa: store.patient.detail.tgl_periksa,
+            kodeDokter: store.doctor.state.selected.id,
+            namaDokter: store.doctor.state.selected.name,
+            kodePoli: store.doctor.state.selected.kd_poli,
+            namaPoli: store.doctor.state.selected.specialist(),
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.status == 201) {
+            //JIKA BERHASIL MASUK DATABASE
 
-              //TAMPILKAN NOTIFIKASI
-              $q.notify({
-                color: "green-4",
-                textColor: "white",
-                icon: "cloud_done",
-                message: "Submitted",
-              });
+            //ambil qrcode dan masukan ke state
+            store.patient.registrationDetail.qrcode = res.data.qrcode;
+            store.patient.registrationDetail.estimasiDipanggil =
+              res.data.jamDatang;
+            store.patient.registrationDetail.antrian = res.data.nomorAntrian;
 
-              //REDIRECT KE HALAMAN REGISTERED DENGAN DATA DARI BACKEND
-              $router.push("/registration/registered");
-            }
-          });
-        // }
-      }
+            //TAMPILKAN NOTIFIKASI
+            $q.notify({
+              color: "green-4",
+              textColor: "white",
+              icon: "cloud_done",
+              message: "Berhasil Terdaftar",
+            });
+
+            //REDIRECT KE HALAMAN REGISTERED DENGAN DATA DARI BACKEND
+            $router.push("/registration/detail");
+          } else if (res.data.data.isRegistered) {
+            store.patient.registrationDetail.qrcode = res.data.data.qrcode;
+            store.patient.registrationDetail.estimasiDipanggil =
+              res.data.data.jamDatang;
+            store.patient.registrationDetail.antrian =
+              res.data.data.nomorAntrian;
+            //TAMPILKAN NOTIFIKASI
+            $q.notify({
+              color: "orange-4",
+              textColor: "accent",
+              icon: "event_available",
+              message: `Pasien atas nama ${store.patient.detail.name} sebelumnya sudah terdaftar`,
+              timeout: 0,
+              type: "info",
+              multiLine: true,
+              actions: [
+                {
+                  label: "Lihat Detail",
+                  color: "secondary",
+                  handler: () => {
+                    $router.push("/registration/detail");
+                  },
+                },
+                {
+                  label: "Tutup",
+                  color: "grey-7",
+                },
+              ],
+            });
+          }
+        });
+      // }
+      // }
     };
 
     onBeforeMount(() => {

@@ -153,7 +153,7 @@
                       v-model="store.patient.detail.noBPJS"
                       label="Nomor Kartu BPJS"
                       mask="######################"
-                      :lazy-rules="formRules.jnsBayar"
+                      :rules="formRules.jnsBayar"
                     ></q-input>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { date } from "quasar";
 import axios from "axios";
 
@@ -23,7 +23,7 @@ const data = reactive({
     pnd: "-", //'TS', 'TK', 'SD', 'SMP', 'SMA', 'SLTA/SEDERAJ'.''
     keluarga: "", //enum('AYAH', 'IBU', 'ISTRI', 'SUAMI', 'SAUDARA'
     namakeluarga: "",
-    kd_pj: '-',
+    kd_pj: "-",
     kd_kel: "80545",
     kd_kec: "1",
     kd_kab: "1",
@@ -56,6 +56,11 @@ const data = reactive({
       process.env.API_ENDPOINT + "pendaftaran/pasien-baru",
       data.detail
     );
+  },
+  registrationDetail: {
+    qrcode: ref(null),
+    estimasiDipanggil: ref(""),
+    antrian: ref(""),
   },
 });
 

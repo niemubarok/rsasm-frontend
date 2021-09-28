@@ -65,10 +65,12 @@ vue/require-prop-types */
         push
         rounded
         text-color="primary"
-        color="secondary"
-        label="Daftar"
+        :color="disable(time.start) ? 'accent' : 'secondary'"
+        :label="disable(time.start) ? 'Tutup' : 'Daftar'"
         @click="daftar"
+        :disable="disable(time.start)"
       />
+      <!-- {{ disable(time.start) }} -->
       <!-- Daftar
         </q-btn> -->
     </q-card-actions>
@@ -104,8 +106,15 @@ export default {
         (store.components.searchBoxClicked = false),
       ];
     };
+
+    const disable = (time) => {
+      const now = new Date().getHours();
+      const jadwalPraktek = time.split(":")[0];
+      return now >= jadwalPraktek;
+    };
     return {
       daftar,
+      disable,
     };
   },
 };

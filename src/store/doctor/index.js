@@ -53,6 +53,17 @@ const state = {
   },
   selected: [],
   selectedDate: ref(""),
+  tempSelected: {
+    id: "001",
+    name: "tes",
+    kd_poli: "tes",
+    specialist: "tes",
+    date: "tes",
+    time: {
+      start: "tes",
+      end: "tes",
+    },
+  },
 
   getDataDokter: () => {
     const dayNumber = new Date(state.searchDate.value).getDay();
@@ -117,53 +128,3 @@ const state = {
 };
 
 export default { state };
-
-// filterBy: {
-//   any: function () {
-//     return state.detail.filter((filtered) => {
-//       const typedText = state.searchText.value.toLowerCase();
-//       const selectedDate = state.searchDate.value;
-//       const selectedSpecialist =
-//         state.searchSpecialist.value !== null
-//           ? state.searchSpecialist.value.toLowerCase()
-//           : "";
-
-//       // const filteredByDate = filtered.date.includes(selectedDate);
-
-//       // FILTERED BY DATE THEN BY SPECIALIST
-
-//       if (selectedDate !== "") {
-//         if (selectedSpecialist !== "") {
-//           data.isFiltered.value = true;
-//           return (
-//             filtered.date == selectedDate &&
-//             filtered.specialist.toLowerCase().includes(selectedSpecialist)
-//           );
-//         } else if (selectedSpecialist !== "") {
-//           data.isFiltered.value = true;
-//           return (
-//             filtered.date == selectedDate &&
-//             filtered.name.toLowerCase().includes(typedText)
-//           );
-//         }
-
-//         return filtered.date.includes(selectedDate);
-//       }
-//       const today = date.formatDate(Date.now(), "DD-MM-YYYY");
-//       return (
-//         filtered.date.includes(today) &&
-//         filtered.specialist.toLowerCase().includes(selectedSpecialist)
-//       );
-//     });
-//   },
-//   time: function () {
-//     return state.detail.filter((filtered) => {
-//       return filtered.date.includes(state.searchText.value);
-//     });
-//   },
-//   // selectedDate: ref(""),
-//   today: function () {
-//     const today = date.formatDate(Date.now(), "DD-MM-YYYY");
-//     return this.filterByTime(today);
-//   },
-// },
