@@ -1,28 +1,28 @@
 <template>
   <q-layout view="lHh Lpr fFf" class="bg-grey-3">
-    <header-layout />
+    <header-layout v-if="!store.components.state.searchBoxClicked" />
     <!-- <footer-layout
       v-if="$q.screen.lt.md && !store.components.state.searchBoxClicked"
     /> -->
 
     <q-drawer
       v-model="store.components.state.leftDrawerOpen"
-      behavior="mobile"
-      bordered
       class="z-max"
+      behavior="mobile"
+      width="130"
     >
       <!-- :width="Number(120) + 'px'" -->
       <!-- mini="true" -->
       <!-- style="width:120px;" -->
       <!-- :width="50+'px'" -->
       <!-- @click="store.components.state.leftDrawerOpen = false" -->
-      <drawer />
+      <drawer class="q-ml-md q-mt-md" />
     </q-drawer>
 
     <q-page-container class="GPL__page-container">
-      <router-view />
+      <router-view class="q-ma-md" />
       <q-page-sticky v-if="$q.screen.gt.sm" expand position="left">
-        <drawer />
+        <drawer class="q-ml-sm" />
       </q-page-sticky>
     </q-page-container>
   </q-layout>

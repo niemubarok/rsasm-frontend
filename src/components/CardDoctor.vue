@@ -13,6 +13,7 @@ vue/require-prop-types */
       background-image: linear-gradient(#f4c360, #e8a216);
     "
     :style="$q.screen.gt.xs ? 'width:300px;' : ''"
+    :class="disable(time.start) ? 'bg-grey-6 no-border' : ''"
   >
     <q-card-section horizontal>
       <q-card-section style="margin-left: 10%; margin-top: -10%">
@@ -56,12 +57,13 @@ vue/require-prop-types */
 
     <q-card-actions>
       <q-btn class="text-grey-9" flat round icon="schedule" />
-      <strong class="text-grey-9"> {{ time.start }} - {{ time.end }} </strong>
+      <strong class="text-grey-9"> {{ jamMulai }} - {{ jamSelesai }} </strong>
       <q-space />
       <q-btn
         v-if="!$route.params.id"
         :to="'/registration/' + id"
         class="text-capitalize"
+        style="width: 100px"
         push
         rounded
         text-color="primary"
@@ -71,6 +73,7 @@ vue/require-prop-types */
         :disable="disable(time.start)"
       />
       <!-- {{ disable(time.start) }} -->
+
       <!-- Daftar
         </q-btn> -->
     </q-card-actions>
@@ -98,7 +101,7 @@ export default {
       default: null,
     },
   },
-  setup() {
+  setup(props) {
     const store = inject("store");
     const daftar = () => {
       return [
@@ -107,14 +110,25 @@ export default {
       ];
     };
 
+    const jamMulai = props.time.start.slice(0, -3);
+    const jamSelesai = props.time.end.slice(0, -3);
+
     const disable = (time) => {
-      const now = new Date().getHours();
+      const currentDate = new Date().getDate();
+      const selectedDate = new Date(
+        store.doctor.state.searchDate.value
+      ).getDate();
+      const currentHour = new Date().getHours();
       const jadwalPraktek = time.split(":")[0];
-      return now >= jadwalPraktek;
+      // if()
+      return currentHour >= jadwalPraktek && currentDate == selectedDate;
     };
     return {
       daftar,
       disable,
+      store,
+      jamMulai,
+      jamSelesai,
     };
   },
 };

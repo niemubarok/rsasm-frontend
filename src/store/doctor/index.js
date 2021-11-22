@@ -78,9 +78,9 @@ const state = {
             hari: dayNumber,
           },
         },
-        {
-          headers: { "Access-Control-Allow-Origin": "*" },
-        }
+        // {
+        //   headers: { "Access-Control-Allow-Origin": "*" },
+        // }
       )
       .then((res) => {
         state.clinicLists.value = Object.values(res.data.data)

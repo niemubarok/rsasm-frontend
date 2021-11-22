@@ -16,7 +16,9 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^10.0.0",
     "downloadjs": "^1.4.7",
+    "image-to-base64": "^2.2.0",
     "js-base64": "^3.6.1",
+    "jspdf": "^2.4.0",
     "quasar": "^2.0.0",
     "vue-router": "4"
   },

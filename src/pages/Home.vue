@@ -9,8 +9,11 @@
 
   <!-- LIST DOKTER YANG PRAKTEK HARI INI -->
   <div
-    class="rounded-borders q-mt-md"
-    :class="$q.screen.gt.sm ? 'q-mx-lg' : ''"
+    class="rounded-borders items-center"
+    :class="[
+      $q.screen.gt.sm ? 'q-mx-lg' : '',
+      store.components.state.searchBoxClicked ? 'column items-center' : '',
+    ]"
   >
     <search-dokter-at-home />
     <carousel-doctor
@@ -62,7 +65,7 @@ import PartnerLogo from "src/components/PartnerLogo.vue";
 import CarouselDoctor from "src/components/CarouselDoctor.vue";
 import { useQuasar } from "quasar";
 import Article from "src/components/Article.vue";
-import InfoHeader from "components/InfoHeader.vue"
+import InfoHeader from "components/InfoHeader.vue";
 // import {getDataDokter} from '/store'
 import SearchDokterAtHome from "src/components/SearchDokterAtHome.vue";
 
@@ -82,7 +85,7 @@ export default {
       } else if ($q.platform.is.mobile) {
         return "height:30vh;";
       }
-      return "height:50vh;padding-top: 10px; margin-top: -7vh";
+      return "height:40vh;padding-top: 10px;";
     };
 
     function setFocus() {

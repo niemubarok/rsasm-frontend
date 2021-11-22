@@ -85,7 +85,7 @@
 
 <script>
 import { useQuasar, date } from "quasar";
-import { inject, reactive, ref, onBeforeMount } from "vue";
+import { inject, ref, onBeforeMount } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
@@ -141,7 +141,14 @@ export default {
               color: "green-4",
               textColor: "white",
               icon: "cloud_done",
-              message: "Berhasil Terdaftar",
+              multiLine: true,
+              message: `Berhasil Terdaftar, Kami mengirimkan detail pendaftaran via whatsapp di nomor berikut: ${store.patient.detail.phone} `,
+              timeout: 0,
+              actions: [
+                {
+                  label: "Saya mengerti",
+                },
+              ],
             });
 
             //REDIRECT KE HALAMAN REGISTERED DENGAN DATA DARI BACKEND
@@ -157,7 +164,9 @@ export default {
               color: "orange-4",
               textColor: "accent",
               icon: "event_available",
-              message: `Pasien atas nama ${store.patient.detail.name} sebelumnya sudah terdaftar`,
+              message: `Sobat sibroh atas nama ${
+                store.patient.detail.name
+              } sebelumnya sudah terdaftar untuk tanggal ${store.patient.formattedTglPeriksa()}`,
               timeout: 0,
               type: "info",
               multiLine: true,

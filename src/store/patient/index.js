@@ -1,6 +1,7 @@
-import { reactive, ref } from "vue";
+import { reactive, ref, inject } from "vue";
 import { date } from "quasar";
 import axios from "axios";
+import state from "../doctor/index";
 
 const data = reactive({
   detail: {
@@ -58,9 +59,21 @@ const data = reactive({
     );
   },
   registrationDetail: {
-    qrcode: ref(null),
+    qrcode: ref("https://via.placeholder.com/150x150"),
     estimasiDipanggil: ref(""),
     antrian: ref(""),
+  },
+  table: () => {
+    return {
+      "No. KTP": data.detail.nik,
+      "Nama Pasien": data.detail.name,
+      "Tanggal Lahir": data.formattedBirthDate(),
+      "No. Whatsapp": data.detail.phone,
+      "Dokter Tujuan": state.state.selected?.name,
+      Klinik: state.state.selected?.specialist(),
+      "Jenis Bayar": data.detail.jnsBayar,
+      "Tanggal Periksa": data.formattedTglPeriksa(),
+    };
   },
 });
 
