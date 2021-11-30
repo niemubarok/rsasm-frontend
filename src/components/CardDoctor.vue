@@ -89,7 +89,7 @@ export default {
       default: null,
     },
     pictureUrl: {
-      default: "img/dokter_placeholder.jpg",
+      default: "~assets/img/dokter_placeholder.jpg",
     },
     specialist: {
       default: null,

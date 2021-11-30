@@ -18,11 +18,11 @@ export default {
     setup() {
         const images = [
             {
-                url: "img/logobpjs.png",
+                url: "~assets/img/logobpjs.png",
                 alt:"logo bpjs"
             },
             {
-                url: "img/logoadmedika.png",
+                url: "~assets/img/logoadmedika.png",
                 alt:"logo admedika"
             }
         ]
