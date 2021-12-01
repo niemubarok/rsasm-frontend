@@ -2,7 +2,7 @@
 vue/require-prop-types */
 <template>
   <q-card
-    class="my-card q-ma-sm"
+    class="my-card q-ma-sm q-pt-xl"
     style="
       border-left: 1px solid #527c51;
       border-right: 3px solid #527c51;
@@ -15,8 +15,8 @@ vue/require-prop-types */
     :style="$q.screen.gt.xs ? 'width:300px;' : ''"
     :class="disable(time.start) ? 'bg-grey-6 no-border' : ''"
   >
-    <q-card-section horizontal>
-      <q-card-section style="margin-left: 10%; margin-top: -10%">
+    <!-- <q-card-section horizontal>
+      <q-card-section style="margin-left: 10%; margin-top: -10%"> -->
         <!-- <div class="row "> -->
         <!-- <q-avatar size="80px" class="shadow-4">
           <img :src="pictureUrl" />
@@ -25,8 +25,8 @@ vue/require-prop-types */
         <!-- align="middle" -->
 
         <!-- </div> -->
-      </q-card-section>
-    </q-card-section>
+      <!-- </q-card-section> -->
+    <!-- </q-card-section> -->
     <q-card-section style="margin-top: -25px">
       <div
         class="text-subtitle1 text-center"
