@@ -18,9 +18,9 @@ vue/require-prop-types */
     <q-card-section horizontal>
       <q-card-section style="margin-left: 10%; margin-top: -10%">
         <!-- <div class="row "> -->
-        <q-avatar size="80px" class="shadow-4">
+        <!-- <q-avatar size="80px" class="shadow-4">
           <img :src="pictureUrl" />
-        </q-avatar>
+        </q-avatar> -->
         <!-- <q-space /> -->
         <!-- align="middle" -->
 
