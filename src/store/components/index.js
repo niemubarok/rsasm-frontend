@@ -1,4 +1,5 @@
 import { reactive } from "vue";
+import axios from 'axios';
 
 const state = reactive({
   leftDrawerOpen: false,
@@ -15,7 +16,19 @@ const state = reactive({
   today: function () {
     return new Date(Date.now()).getDate();
   },
+  settings:"",
+  getSettings: async () => {
+     await axios({
+      url: process.env.API_ENDPOINT + "settings",
+      method: "GET",
+     }).then(res => {
+      // console.log(res);
+      state.settings = res.data.data
+    });
+}
 });
+
+ 
 
 setTimeout(() => {
   state.showSwipeIcon = false;

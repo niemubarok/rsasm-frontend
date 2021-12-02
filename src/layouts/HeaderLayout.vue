@@ -7,18 +7,19 @@
     >
       <q-toolbar class="GPL__toolbar" style="height: 64px">
         <menu-button />
-        <q-img
-          src="logo.png"
+        <!-- <q-img
+          src="~assets/img/logo.png"
           loading="lazy"
           spinner-color="white"
           height="50px"
           style="max-width: 50px"
-        />
+        /> -->
+        <logo />
         <router-link to="/" style="text-decoration: none">
           <q-toolbar-title
             v-if="$q.screen.gt.sm"
             shrink
-            class="q-mr-xl row items-center no-wrap"
+            class="q-mr-xl q-ml-sm row items-center no-wrap"
           >
             <strong>
               <span style="color: #366835"> RS </span>
@@ -93,9 +94,12 @@
 import { inject } from "vue";
 import RegButton from "src/components/button/RegButton.vue";
 import MenuButton from "src/components/button/menuButton.vue";
+import Logo from "src/components/Logo.vue";
 
 export default {
-  components: { RegButton, MenuButton },
+  components: { RegButton, MenuButton,
+   Logo 
+   },
 
   setup() {
     const store = inject("store");

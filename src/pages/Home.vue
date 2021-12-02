@@ -4,7 +4,6 @@
     :class="$q.screen.gt.sm ? 'q-ml-lg' : ''"
     v-if="!store.components.state.searchBoxClicked"
   />
-
   <!-- <div class="bg-primary"></div> -->
 
   <!-- LIST DOKTER YANG PRAKTEK HARI INI -->
