@@ -21,7 +21,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ["store", "axios"],
+    boot: ["store", "axios","select"],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ["app.scss"],
@@ -88,6 +88,7 @@ module.exports = configure(function (ctx) {
           accent: "#213441",
           // accent: "#2E7758",
           positive: "#2E7758",
+          danger: "#962A44",
         },
       },
 

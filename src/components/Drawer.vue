@@ -1,6 +1,6 @@
 <template>
   <div
-    class="q-py-md column bg-grey-4"
+    class="q-py-lg column bg-grey-4"
     style="border-radius: 40px; width: 100px"
   >
     <router-link to="/doctor/search" style="text-decoration: none">

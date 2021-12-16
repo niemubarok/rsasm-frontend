@@ -2,9 +2,17 @@
   <router-view />
 </template>
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent,onBeforeMount, inject } from 'vue';
+
 
 export default defineComponent({
-  name: 'App'
+  name: 'App',
+  setup(){
+    const store = inject("store")
+    onBeforeMount(() => {
+       store.components.state.getSettings();
+    })
+  }
+
 })
 </script>

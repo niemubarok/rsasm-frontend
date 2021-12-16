@@ -36,6 +36,15 @@ const routes = [
     path: "/test",
     component: () => import("pages/test.vue"),
   },
+  {
+    path: "/depo",
+    component: () => import("pages/opname/ChooseDepo.vue"),
+  },
+  {
+    path: "/so",
+    name:'so',
+    component: () => import("pages/opname/FormSO.vue"),
+  },
   // {
   //   path:'/registration',
   //   component: ()=> import('pages/form/RegistrationPage.vue'),

@@ -45,7 +45,7 @@
         </q-popup-proxy>
       </q-btn>
     </div>
-    <div class="transparent">
+    <div class="transparent q-mt-sm">
       <q-chip dense :class="{ 'q-ml-xl': !$q.platform.is.mobile }"
         >Spesialis tersedia :</q-chip
       >

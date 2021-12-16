@@ -1,69 +1,54 @@
 <template>
-  <!-- <div class="q-ma-md"> -->
-  <!-- :flat="$q.screen.lt.sm" -->
-  <!-- flat
-    :bordered="$q.screen.gt.sm" -->
-  <q-card tag="div" class="q-pa-md q-mt-md fit" style="border-radius: 30px">
-    <div>
-      <q-chip
-        v-if="store.patient.registrationDetail.qrcode"
-        icon-right="download"
-        clickable
-        text-color="accent"
-        align="left"
-        @click="test"
-        color="primary"
-        label="Simpan detail pendaftaran"
-        size="sm"
-        class="absolute-bottom-right q-mr-xl q-mb-sm z-top q-py-sm"
-        style="width: 200px"
-      ></q-chip>
-    </div>
+  <div :class="{ 'window-height q-pb-xl': $q.screen.gt.sm }" class="row justify-center">
+    <q-card
+      tag="div"
+      :class="{ 'q-pb-xl': $q.screen.lt.sm }"
+      class="q-pa-md q-my-md fit"
+      style="border-radius: 20px;max-width:1024px"
+    >
+      <navigation cardTitle="Detail Pendaftaran" />
+      <q-separator />
+      <div id="content" class="row q-col-gutter-sm">
+        <div class="row justify-center q-mt-md">
+        <!-- detail pasien -->
+          <q-card
+            flat
+            bordered
+            class="q-mt-sm"
+            :class="$q.screen.lt.md ? 'q-mt-md fit' : ''"
+            style="border-radius: 20px;max-width: 600px;"
+          >
+            <q-card-section class="q-pa-md">
+              <table ref="toPrint">
+                <template v-for="(value, key) in patients" :key="key">
+                  <tr>
+                    <td>{{ key }}</td>
+                    <td>: {{ value }}</td>
+                  </tr>
+                </template>
+              </table>
+            </q-card-section>
+          </q-card>
 
-    <navigation cardTitle="Detail Pendaftaran" />
-    <q-separator />
-    <div id="content" class="column items-start q-gutter-xs">
-      <div class="row q-mt-md">
-        <q-card
-          flat
-          bordered
-          class="q-pt-sm q-mt-sm"
-          :class="$q.screen.lt.sm ? 'q-mt-md fit' : ''"
-          style="border-radius: 30px; min-width: 300px; height: 250px"
-        >
-          <q-card-section class="q-pa-md">
-            <table ref="toPrint">
-              <template
-                v-for="(value, key) in store.patient.table()"
-                :key="key"
-              >
-                <tr>
-                  <td>{{ key }}</td>
-                  <td>: {{ value }}</td>
-                </tr>
-              </template>
-            </table>
-          </q-card-section>
-        </q-card>
-
-        <!-- QRCODE -->
-        <q-card
-          id="qrcode"
-          flat
-          bordered
-          class="transparent q-ml-sm"
-          style="min-width: 250px; min-height: 250px width:400px"
-          :style="$q.screen.lt.md ? 'margin-top: 20px;' : ''"
-        >
-          <q-card-section class="column items-center">
-            <span>Simpanlah qrcode berikut untuk melakukan checkin</span>
-            <img
-              v-if="store.patient.registrationDetail.qrcode"
-              :src="store.patient.registrationDetail.qrcode"
-              style="width: 200px; height: 200px"
-            />
-          </q-card-section>
-          <div class="float-right" style="margin-top: -30px">
+          <!-- QRCODE -->
+          <q-card
+            id="qrcode"
+            flat
+            bordered
+            class="transparent q-ml-sm q-mt-sm q-pa-md"
+            :class="$q.screen.lt.sm ? 'q-mt-md fit' : ''"
+            style="max-width: 700px; border-radius:20px"
+          >
+            <!-- :style="$q.screen.lt.md ? 'margin-top: 20px;' : ''" -->
+            <q-card-section class="column items-center">
+              <img
+                v-if="store.patient.registrationDetail.qrcode"
+                :src="store.patient.registrationDetail.qrcode"
+                style="width: 200px; height: 200px"
+              />
+              <small>*Digunakan saat checkin</small>
+            </q-card-section>
+            <!-- <div class="float-right" style="margin-top: -30px"> -->
             <!-- <q-chip
               v-if="store.patient.registrationDetail.qrcode"
               icon-right="download"
@@ -74,53 +59,84 @@
               color="primary"
               label="Simpan Qr-Code"
               size="sm"
-            ></q-chip> -->
+            ></q-chip>-->
             <!-- <q-chip
               v-if="store.patient.registrationDetail.qrcode"
               icon-right="download"
               clickable
               text-color="accent"
               align="left"
-              @click="test"
+              @click="saveRegistrationDetail"
               color="primary"
               label="Simpan detail pendaftaran"
               size="sm"
               class="absolute-bottom"
-            ></q-chip> -->
-          </div>
-        </q-card>
+            ></q-chip>-->
+            <!-- </div> -->
+          </q-card>
 
-        <!-- ANTRIAN -->
-        <q-card
-          id="antrian"
-          style="border-radius: 30px; height: 250px"
-          class="q-pb-sm q-mx-sm q-mt-sm"
-          :class="$q.screen.lt.sm ? 'fit' : ''"
-          flat
-          bordered
-        >
-          <q-card-section class="bg-green-3 text-center text-grey-7 text-h6">
-            Nomor Antrian
-          </q-card-section>
-          <div class="column items-center">
-            <q-chip size="xl" color="white">
-              <span class="text-h4">
-                {{ store.patient.registrationDetail.antrian }}
-              </span>
-            </q-chip>
-          </div>
-          <div class="column items-center">
-            Estimasi dipanggil :
-            <q-chip>
-              <span>{{
-                store.patient.registrationDetail.estimasiDipanggil
-              }}</span>
-            </q-chip>
-          </div>
-        </q-card>
+          <!-- ANTRIAN -->
+          <q-card
+            id="antrian"
+            style="border-radius: 20px; height: 250px;min-width:200px"
+            class="q-pb-sm q-mx-sm q-mt-sm items-center"
+            :class="$q.screen.lt.sm ? 'fit' : ''"
+            flat
+            bordered
+          >
+            <q-card-section class="bg-secondary text-center text-primary text-h6">Nomor Antrian</q-card-section>
+            <div class="column items-center q-my-md">
+              <q-chip size="xl" color="white">
+                <span class="text-h3">{{ store.patient.registrationDetail.antrian }}</span>
+              </q-chip>
+            </div>
+            <div class="column items-center">
+              Estimasi dipanggil :
+              <q-chip color="secondary">
+                <span class="text-white">
+                  {{
+                    store.patient.registrationDetail.estimasiDipanggil
+                  }}
+                </span>
+              </q-chip>
+            </div>
+          </q-card>
+        </div>
       </div>
-    </div>
-  </q-card>
+      <div class="row justify-center">
+        <q-btn
+          push
+          v-if="store.patient.registrationDetail.qrcode"
+          icon-right="download"
+          text-color="accent"
+          @click="saveRegistrationDetail"
+          color="primary"
+          label="Simpan detail pendaftaran"
+          size="sm"
+          class="q-mb-sm q-mt-md q-py-md"
+          :class="{ 'fixed-bottom-right': $q.screen.lt.sm }"
+          style="border-radius:15px;"
+        ></q-btn>
+      </div>
+    </q-card>
+  </div>
+  <q-dialog v-model="saveModal" persistent>
+    <q-card class="bg-secondary text-primary q-py-lg">
+      <q-card-section>
+        Nyok! simpan dulu bukti daftarnya 👉
+        <q-btn
+          v-if="store.patient.registrationDetail.qrcode"
+          icon="download"
+          push
+          text-color="accent"
+          @click="saveOnModalHandler"
+          color="primary"
+          size="lg"
+          class="z-top"
+        ></q-btn>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
@@ -140,6 +156,8 @@ export default {
     const toPrint = ref(null);
     const reader = new FileReader();
     const qrcode = document.getElementById("qrcode");
+    const saveModal = ref(false)
+    const patients = store.patient?.table()
 
     const download = () => {
       const link = store.patient.registrationDetail.qrcode;
@@ -150,7 +168,7 @@ export default {
       downloadLink.click();
     };
 
-    const test = async () => {
+    const saveRegistrationDetail = async () => {
       const doc = new jsPDF("p", "pt", "a5");
       doc.setFontSize(12);
       doc.text(120, 30, `:::Bukti Pendaftaran Online:::`);
@@ -211,6 +229,11 @@ export default {
       }, 1000);
     };
 
+    const saveOnModalHandler = () => {
+      saveRegistrationDetail()
+      saveModal.value = false
+    }
+
     onMounted(() => {
       if (
         store.doctor.state.selected == null ||
@@ -218,12 +241,18 @@ export default {
       ) {
         router.push("/");
       }
+
+      // saveRegistrationDetail()
+
     });
     return {
       download,
       store,
-      test,
+      saveRegistrationDetail,
       toPrint,
+      saveModal,
+      saveOnModalHandler,
+      patients,
     };
   },
 };

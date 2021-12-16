@@ -1,6 +1,6 @@
 <template>
     <router-link to="/registration" style="text-decoration:none">
-        <q-btn v-if="$route.path == '/'" no-wrap push text-color="grey-9" color="primary" icon="assignment"  label="Daftar Berobat" class="q-ml-sm" />
+        <q-btn v-if="$route.path == '/'" no-wrap push text-color="grey-9" color="primary" icon="assignment"  label="Daftar Berobat" />
     </router-link>
 </template>
 

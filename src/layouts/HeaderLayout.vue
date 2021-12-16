@@ -7,23 +7,17 @@
     >
       <q-toolbar class="GPL__toolbar" style="height: 64px">
         <menu-button />
-        <!-- <q-img
-          src="~assets/img/logo.png"
-          loading="lazy"
-          spinner-color="white"
-          height="50px"
-          style="max-width: 50px"
-        /> -->
         <logo />
         <router-link to="/" style="text-decoration: none">
           <q-toolbar-title
-            v-if="$q.screen.gt.sm"
+            v-if="$q.screen.gt.xs"
             shrink
             class="q-mr-xl q-ml-sm row items-center no-wrap"
           >
             <strong>
               <span style="color: #366835"> RS </span>
-              <span style="color: #f9a602"> Ali Sibroh Malisi</span></strong
+              <!-- <span style="color: #f9a602"> Ali Sibroh Malisi</span></strong -->
+              <span style="color: #f9a602">{{namaInstansi()}}</span></strong
             >
           </q-toolbar-title>
         </router-link>
@@ -51,21 +45,8 @@
           </template>
         </q-input> -->
 
-        <reg-button />
-
-        <q-btn
-          v-if="$q.screen.gt.xs"
-          flat
-          dense
-          no-wrap
-          color="secondary"
-          icon="login"
-          no-caps
-          label="Masuk"
-          class="q-ml-sm q-px-md"
-        />
-
-        <q-space />
+       
+       
 
         <!-- <div class="q-gutter-sm row items-center no-wrap">
           <q-btn round dense flat color="text-grey-7" icon="apps">
@@ -84,6 +65,22 @@
             <q-tooltip>Account</q-tooltip>
           </q-btn>
         </div> -->
+       
+        <info-header/>
+         <!-- <q-space v-if="$q.screen.gt.md" /> -->
+        <reg-button />
+
+         <!-- <q-btn
+          v-if="$q.screen.gt.xs"
+          flat
+          dense
+          no-wrap
+          color="secondary"
+          icon="login"
+          no-caps
+          label="Masuk"
+          class="q-ml-sm q-px-md"
+        /> -->
       </q-toolbar>
       <q-separator />
     </q-header>
@@ -95,16 +92,17 @@ import { inject } from "vue";
 import RegButton from "src/components/button/RegButton.vue";
 import MenuButton from "src/components/button/menuButton.vue";
 import Logo from "src/components/Logo.vue";
+import InfoHeader from "src/components/InfoHeader.vue";
 
 export default {
-  components: { RegButton, MenuButton,
-   Logo 
-   },
+  components: { RegButton, MenuButton, Logo, InfoHeader },
 
   setup() {
     const store = inject("store");
+    const namaInstansi = ()=> store.components.state.settings.nama_instansi?.toUpperCase().replace("RS", "").replace("RUMAH SAKIT", "")
     return {
       store,
+      namaInstansi
     };
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <q-btn
-    v-if="$q.screen.lt.lg"
+    v-if="$q.screen.lt.md"
     flat
     dense
     round
