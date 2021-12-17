@@ -7,13 +7,19 @@ const data = reactive({
   { id: "FAR1", label: "Gudang" },
   { id: "FAR3", label: "Depo Rajal" },
 ],
-  obat: "",
-  petugas: "",
-  real: 0,
   
   getObat: async () => {
     // console.log(process.env.API_ENDPOINT);
+    console.log("executed")
     return await axios.get(process.env.API_ENDPOINT+'opname/obat')
+  },
+  storeOpname: async (obj) => {
+    // console.log(obj)
+    const store = await axios.post(process.env.API_ENDPOINT + "opname/store", {
+      data:obj
+    });
+
+    console.log(store)
   }
   
 });

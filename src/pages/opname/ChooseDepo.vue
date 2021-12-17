@@ -29,7 +29,6 @@
           />
           <!-- :error="depo == ''" -->
         </div>
-        {{ depo }}
         <div class="row justify-end">
           <q-btn label="Mulai SO" type="submit" color="primary" text-color="secondary" />
         </div>
