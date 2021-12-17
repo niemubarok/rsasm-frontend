@@ -89,9 +89,6 @@
             </template>
           </v-select>
         </div>
-        {{ jumlah }} <br />
-        {{ kdBangsal }}<br />
-
         <q-input
           ref="realRef"
           :disable="!selected"
@@ -184,16 +181,15 @@ const onConfirm = async () => {
   };
   await store.opname.storeOpname(dataToStore);
 
-  selected.value = null;
-  jumlah.value = null;
-  confirm.value = false;
-
   //   show notification if success
   $q.notify({
     caption: `${selected.value} Berhasil disimpan`,
     icon: "check",
     color: "secondary",
   });
+  selected.value = null;
+  jumlah.value = null;
+  confirm.value = false;
 };
 
 onBeforeMount(() => {
