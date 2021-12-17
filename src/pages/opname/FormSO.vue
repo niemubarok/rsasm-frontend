@@ -12,33 +12,33 @@
           color="grey-4"
           text-color="red"
           size="sm"
-          rounded=""
+          rounded
+          >X</q-chip
         >
-          X
-        </q-chip>
       </div>
 
       <q-card-section class="text-center">
-        Jumlah Fisik<br />
+        Jumlah Fisik
+        <br />
         <strong>{{ selected }}</strong>
         <q-card
           flat
           class="q-my-sm row bg-primary q-py-md q-px-sm justify-center items-center"
         >
-          <span class="text-h3 text-weight-bold text-secondary">
-            {{ jumlah }}
-          </span>
+          <span class="text-h3 text-weight-bold text-secondary">{{ jumlah }}</span>
           <div>
-            <q-badge text-color="grey-9" class="text-h5">
-              {{ satuan }}
-            </q-badge>
+            <q-badge text-color="grey-9" class="text-h5">{{ satuan }}</q-badge>
           </div>
         </q-card>
       </q-card-section>
       <q-card-action class="row justify-center q-mt-md">
-        <q-btn push @click="onConfirm" color="secondary" class="q-py-md"
-          >Ya sudah benar</q-btn
-        >
+        <q-btn
+          push
+          @click="onConfirm"
+          color="secondary"
+          class="q-py-md"
+          :label="isSuccess ? 'Ya sudah benar' : 'Coba Lagi'"
+        ></q-btn>
       </q-card-action>
     </q-card>
   </q-dialog>
@@ -54,7 +54,7 @@
     >
       <div class="row justify-between">
         Aplikasi Stok Opname Farmasi
-        <span class="text-body2 text-weight-thin"> v.1.0</span>
+        <span class="text-body2 text-weight-thin">v.1.0</span>
       </div>
     </q-banner>
     <div class="row justify-between q-my-sm q-px-md text-body2 text-grey-8">
@@ -63,9 +63,9 @@
         Depo :
         <q-badge color="secondary" text-color="black">
           <span class="text-primary text-caption text-bold q-ml-xs">
-            {{ depo?.label }}</span
-          ></q-badge
-        >
+            {{ depo?.label }}
+          </span>
+        </q-badge>
       </div>
     </div>
     <div class="q-pa-md">
@@ -109,7 +109,7 @@
           <q-btn
             @click="chooseDepo"
             flat
-            no-caps=""
+            no-caps
             label="pilih depo"
             text-color="grey-5"
           />
@@ -119,6 +119,7 @@
             type="submit"
             color="primary"
             text-color="secondary"
+            :disable="!selected || !jumlah"
           />
         </div>
       </q-form>
@@ -146,9 +147,10 @@ const satuan = ref("");
 const kdBarang = ref("");
 const petugas = localStorage.getItem("petugas");
 const depo = JSON.parse(localStorage.getItem("depo"));
-const kdBangsal = depo.id;
+const kdBangsal = depo?.id;
 const hargaBeli = ref(0);
 const tanggal = date.formatDate(Date.now(), "YYYY-MM-DD");
+const isSuccess = ref(false);
 
 const chooseDepo = () => {
   router.push("/depo");
@@ -179,17 +181,29 @@ const onConfirm = async () => {
     real: jumlah.value,
     tanggal,
   };
-  await store.opname.storeOpname(dataToStore);
-
-  //   show notification if success
-  $q.notify({
-    caption: `${selected.value} Berhasil disimpan`,
-    icon: "check",
-    color: "secondary",
-  });
-  selected.value = null;
-  jumlah.value = null;
-  confirm.value = false;
+  const storeOpname = await store.opname.storeOpname(dataToStore);
+  console.log(storeOpname);
+  if (storeOpname?.data.message === "success") {
+    //   show notification if success
+    $q.notify({
+      caption: `${selected.value} Berhasil disimpan`,
+      icon: "check",
+      color: "secondary",
+      position: "center",
+    });
+    selected.value = null;
+    jumlah.value = null;
+    confirm.value = false;
+  } else {
+    $q.notify({
+      caption: `${selected.value} Gagal disimpan`,
+      icon: "check",
+      color: "red",
+      position: "center",
+    });
+    // confirm.value = false;
+    isSuccess.value = false;
+  }
 };
 
 onBeforeMount(() => {
@@ -232,7 +246,7 @@ input[type="number"] {
   height: 50px;
 }
 .style-chooser .vs__dropdown-menu {
-  background: #f0d295;
+  background: #f9fff8;
   border: none;
   color: #394066;
   text-transform: lowercase;

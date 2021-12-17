@@ -45,6 +45,10 @@ const routes = [
     name:'so',
     component: () => import("pages/opname/FormSO.vue"),
   },
+  {
+    path: '/tshirt',
+    component: () => import("pages/Tshirt.vue"),
+  },
   // {
   //   path:'/registration',
   //   component: ()=> import('pages/form/RegistrationPage.vue'),

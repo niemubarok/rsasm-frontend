@@ -15,11 +15,9 @@ const data = reactive({
   },
   storeOpname: async (obj) => {
     // console.log(obj)
-    const store = await axios.post(process.env.API_ENDPOINT + "opname/store", {
+     return await axios.post(process.env.API_ENDPOINT + "opname/store", {
       data:obj
     });
-
-    console.log(store)
   }
   
 });
