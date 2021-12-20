@@ -53,8 +53,18 @@
       class="q-pa-md bg-secondary text-white text-weight-bold row justify-between"
     >
       <div class="row justify-between">
-        Aplikasi Stok Opname Farmasi
-        <span class="text-body2 text-weight-thin">v.1.0</span>
+        <q-chip square color="secondary" text-color="grey-5" icon="store"
+          >Aplikasi Stok Opname Farmasi
+        </q-chip>
+        <div>
+          <q-badge
+            color="green-10"
+            text-color="green-4"
+            size="xs"
+            class="text-weight-thin q-py-xs"
+            >V.1.0</q-badge
+          >
+        </div>
       </div>
     </q-banner>
     <div class="row justify-between q-my-sm q-px-md text-body2 text-grey-8">
