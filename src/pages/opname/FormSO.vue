@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="confirm">
+  <q-dialog v-model="confirm" persistent>
     <q-card
       class="q-pa-md q-px-lg"
       :style="$q.screen.lt.sm ? 'min-width: 90%' : 'min-width:400px'"
@@ -45,8 +45,8 @@
 
   <q-card
     flat
-    class="rounded-borders bg-grey-4"
-    :class="[$q.screen.gt.xs ? 'fixed-center' : '']"
+    class="bg-grey-4"
+    :class="[$q.screen.gt.xs ? 'fixed-center rounded-borders' : '']"
     :style="$q.screen.gt.xs ? 'width: 300px; min-width: 60%' : ''"
   >
     <q-banner
@@ -72,6 +72,7 @@
       <q-form @submit="onSubmit" class="q-gutter-md">
         <div class="rounded-borders">
           <v-select
+            ref="vselectRef"
             class="full-width style-chooser"
             v-model="selected"
             :options="options"
@@ -95,13 +96,20 @@
           standout="bg-secondary"
           v-model="jumlah"
           label="Jumlah Real"
-          placeholder="Masukan Jumlah Sesuai Satuan"
+          placeholder="Masukan Jumlah Sesuai Satuan &#x279D;"
           type="number"
           lazy-rules
           :rules="[(val) => val !== null || 'Jumlah masih kosong']"
         >
           <template #append>
-            <span>{{ satuan }}</span>
+            <q-chip
+              v-if="satuan"
+              square
+              color="grey-1"
+              class="text-h5 no-shadow text-secondary text-weight-bold q-px-sm"
+              >{{ satuan }}
+              <q-badge floating class="text-accent">satuan</q-badge>
+            </q-chip>
           </template>
         </q-input>
         <div class="row justify-between">
@@ -118,6 +126,7 @@
             type="submit"
             color="primary"
             text-color="secondary"
+            class="q-pa-md"
             :disable="!selected || !jumlah"
           />
         </div>
@@ -139,6 +148,7 @@ const router = useRouter();
 const options = ref("");
 
 const selected = ref(null);
+const vselectRef = ref(null);
 const jumlah = ref(null);
 const realRef = ref(null);
 const confirm = ref(false);
@@ -189,7 +199,7 @@ const onConfirm = async () => {
       caption: `${selected.value} Berhasil disimpan`,
       icon: "check",
       color: "secondary",
-      position: "center",
+      position: "bottom",
     });
     selected.value = null;
     jumlah.value = null;
@@ -200,7 +210,7 @@ const onConfirm = async () => {
       caption: `${selected.value} Gagal disimpan`,
       icon: "check",
       color: "red",
-      position: "center",
+      position: "bottom",
     });
     isSuccess.value = false;
   }
