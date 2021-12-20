@@ -48,8 +48,10 @@ const depo = ref(null);
 const router = useRouter();
 const options = store.opname.depo;
 // const options = ['paracetamol', 'ranitidin', "dll", "valisanbe", "ABBOCATH", "VENFLON 24","CATGUT CHROMIC 0 TEPER"]
-const onSubmit = () => {
+const onSubmit = async () => {
   if (depo.value) {
+    const obat = await store.opname.getObat();
+    localStorage.setItem("obat", JSON.stringify(obat.data.data));
     localStorage.setItem("depo", JSON.stringify(depo.value));
     localStorage.setItem("petugas", petugas.value);
     router.push({ name: "so" });

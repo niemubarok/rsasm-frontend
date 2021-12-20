@@ -9,8 +9,7 @@ const data = reactive({
 ],
   
   getObat: async () => {
-    // console.log(process.env.API_ENDPOINT);
-    console.log("executed")
+    console.log(process.env.API_ENDPOINT);
     return await axios.get(process.env.API_ENDPOINT+'opname/obat')
   },
   storeOpname: async (obj) => {

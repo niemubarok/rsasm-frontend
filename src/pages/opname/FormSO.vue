@@ -95,7 +95,7 @@
           standout="bg-secondary"
           v-model="jumlah"
           label="Jumlah Real"
-          hint="Masukan Jumlah Sesuai Satuan"
+          placeholder="Masukan Jumlah Sesuai Satuan"
           type="number"
           lazy-rules
           :rules="[(val) => val !== null || 'Jumlah masih kosong']"
@@ -104,7 +104,6 @@
             <span>{{ satuan }}</span>
           </template>
         </q-input>
-
         <div class="row justify-between">
           <q-btn
             @click="chooseDepo"
@@ -124,7 +123,7 @@
         </div>
       </q-form>
     </div>
-    <small class="text-grey-5 q-ml-md">&COPY;niemubarok</small>
+    <small class="text-grey-5 text-weight-thin q-ml-md">&COPY;niemubarok</small>
   </q-card>
 </template>
 
@@ -150,12 +149,13 @@ const depo = JSON.parse(localStorage.getItem("depo"));
 const kdBangsal = depo?.id;
 const hargaBeli = ref(0);
 const tanggal = date.formatDate(Date.now(), "YYYY-MM-DD");
-const isSuccess = ref(false);
+const isSuccess = ref(true);
 
 const chooseDepo = () => {
   router.push("/depo");
   localStorage.removeItem("petugas");
   localStorage.removeItem("depo");
+  localStorage.removeItem("obat");
 };
 
 const onClose = () => {
@@ -178,7 +178,7 @@ const onConfirm = async () => {
     petugas: petugas,
     kd_bangsal: kdBangsal,
     h_beli: hargaBeli.value,
-    real: jumlah.value,
+    real: Number(jumlah.value),
     tanggal,
   };
   const storeOpname = await store.opname.storeOpname(dataToStore);
@@ -194,6 +194,7 @@ const onConfirm = async () => {
     selected.value = null;
     jumlah.value = null;
     confirm.value = false;
+    isSuccess.value = true;
   } else {
     $q.notify({
       caption: `${selected.value} Gagal disimpan`,
@@ -201,7 +202,6 @@ const onConfirm = async () => {
       color: "red",
       position: "center",
     });
-    // confirm.value = false;
     isSuccess.value = false;
   }
 };
