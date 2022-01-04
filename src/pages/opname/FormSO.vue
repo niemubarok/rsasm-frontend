@@ -1,9 +1,6 @@
 <template>
   <q-dialog v-model="confirm" persistent>
-    <q-card
-      class="q-pa-md q-px-lg"
-      :style="$q.screen.lt.sm ? 'min-width: 90%' : 'min-width:400px'"
-    >
+    <q-card class="q-pa-md q-px-lg" :style="$q.screen.lt.sm ? 'min-width: 90%' : 'min-width:400px'">
       <div class="row justify-end">
         <q-chip
           @click="confirm = false"
@@ -13,29 +10,26 @@
           text-color="red"
           size="sm"
           rounded
-          >X</q-chip
-        >
+        >X</q-chip>
       </div>
 
       <q-card-section class="text-center">
         Jumlah Fisik
         <br />
         <strong>{{ selected }}</strong>
-        <q-card
-          flat
-          class="q-my-sm row bg-primary q-py-md q-px-sm justify-center items-center"
-        >
+        <q-card flat class="q-my-sm row bg-primary q-py-md q-px-sm justify-center items-center">
           <span class="text-h3 text-weight-bold text-secondary">{{ jumlah }}</span>
           <div>
             <q-badge text-color="grey-9" class="text-h5">{{ satuan }}</q-badge>
           </div>
         </q-card>
+        <div>Expire date : {{ expireDate }}</div>
       </q-card-section>
       <q-card-action class="row justify-center q-mt-md">
         <q-btn
           push
           @click="onConfirm"
-          color="secondary"
+          :color="isSuccess ? 'secondary' : 'red'"
           class="q-py-md"
           :label="isSuccess ? 'Ya sudah benar' : 'Coba Lagi'"
         ></q-btn>
@@ -49,21 +43,21 @@
     :class="[$q.screen.gt.xs ? 'fixed-center rounded-borders' : '']"
     :style="$q.screen.gt.xs ? 'width: 300px; min-width: 60%' : ''"
   >
-    <q-banner
-      class="q-pa-md bg-secondary text-white text-weight-bold row justify-between"
-    >
+    <q-banner class="q-pa-md bg-secondary text-white text-weight-bold row justify-between">
       <div class="row justify-between">
-        <q-chip square color="secondary" text-color="grey-5" icon="store"
-          >Aplikasi Stok Opname Farmasi
-        </q-chip>
+        <q-chip
+          square
+          color="secondary"
+          text-color="grey-5"
+          icon="store"
+        >Aplikasi Stok Opname Farmasi</q-chip>
         <div>
           <q-badge
             color="green-10"
             text-color="green-4"
             size="xs"
             class="text-weight-thin q-py-xs"
-            >V.1.0</q-badge
-          >
+          >V.1.0</q-badge>
         </div>
       </div>
     </q-banner>
@@ -72,9 +66,7 @@
       <div>
         Depo :
         <q-badge color="secondary" text-color="black">
-          <span class="text-primary text-caption text-bold q-ml-xs">
-            {{ depo?.label }}
-          </span>
+          <span class="text-primary text-caption text-bold q-ml-xs">{{ depo?.nm_bangsal }}</span>
         </q-badge>
       </div>
     </div>
@@ -117,19 +109,36 @@
               square
               color="grey-1"
               class="text-h5 no-shadow text-secondary text-weight-bold q-px-sm"
-              >{{ satuan }}
+            >
+              {{ satuan }}
               <q-badge floating class="text-accent">satuan</q-badge>
             </q-chip>
           </template>
         </q-input>
+
+        <q-input
+          stack-label
+          filled
+          v-model="expire"
+          label=" Expire Date"
+          type="date"
+          :disable="!jumlah"
+        >
+          <!-- :rules="['date']" -->
+          <!-- <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy ref="qDateProxy" cover transition-show="scale" transition-hide="scale">
+                <q-date v-model="expire">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>-->
+        </q-input>
         <div class="row justify-between">
-          <q-btn
-            @click="chooseDepo"
-            flat
-            no-caps
-            label="pilih depo"
-            text-color="grey-5"
-          />
+          <q-btn @click="chooseDepo" flat no-caps label="Ganti depo" text-color="grey-7" />
           <q-btn
             icon="save"
             label="Simpan"
@@ -147,7 +156,7 @@
 </template>
 
 <script setup>
-import { ref, inject, onMounted, onBeforeMount } from "vue";
+import { ref, inject, onMounted, onBeforeMount, computed } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import { date } from "quasar";
@@ -166,9 +175,12 @@ const satuan = ref("");
 const kdBarang = ref("");
 const petugas = localStorage.getItem("petugas");
 const depo = JSON.parse(localStorage.getItem("depo"));
-const kdBangsal = depo?.id;
+const kdBangsal = depo?.kd_bangsal;
 const hargaBeli = ref(0);
-const tanggal = date.formatDate(Date.now(), "YYYY-MM-DD");
+// const expire = date.formatDate(Date.now(), "YYYY-MM-DD");
+// const expire = ref(date.formatDate(Date.now(), "YYYY-MM-DD"));
+const expire = ref('')
+const expireDate = computed(() => (date.formatDate(expire.value, "DD-MM-YYYY")))
 const isSuccess = ref(true);
 
 const chooseDepo = () => {
@@ -199,10 +211,9 @@ const onConfirm = async () => {
     kd_bangsal: kdBangsal,
     h_beli: hargaBeli.value,
     real: Number(jumlah.value),
-    tanggal,
+    expire: expire.value,
   };
   const storeOpname = await store.opname.storeOpname(dataToStore);
-  console.log(storeOpname);
   if (storeOpname?.data.message === "success") {
     //   show notification if success
     $q.notify({
@@ -215,6 +226,8 @@ const onConfirm = async () => {
     jumlah.value = null;
     confirm.value = false;
     isSuccess.value = true;
+    satuan.value = ""
+    expire.value = ""
   } else {
     $q.notify({
       caption: `${selected.value} Gagal disimpan`,
